@@ -16,4 +16,6 @@ missing
 src/.deps
 src/Makefile
 src/Makefile.in
+src/swfdec-thumbnailer
+src/*.o
 stamp-h1
