@@ -1,5 +1,5 @@
 AC_PREREQ([2.58])
-AC_INIT(swfdec-thumbnailer, 0.5.2.1)
+AC_INIT(swfdec-thumbnailer, 0.5.3.1)
 
 [nano=$(echo $PACKAGE_VERSION | sed 's/[0-9]\.[0-9]\.[0-9][0-9]*\.*//')]
 if test x"$nano" = x1 ; then
@@ -37,7 +37,7 @@ AC_ARG_WITH(pkg-config-path,
    AC_HELP_STRING([--with-pkg-config-path],[colon-separated list of pkg-config(1) dirs]),
    [export PKG_CONFIG_PATH=${withval}])
 
-SWFDEC_REQUIRES=0.5.2.1
+SWFDEC_REQUIRES=0.5.3.1
 PKG_CHECK_MODULES(SWFDEC, swfdec-$SWFDEC_MAJORMINOR = $SWFDEC_REQUIRES, HAVE_SWFDEC=yes, HAVE_SWFDEC=no)
 if test "$HAVE_SWFDEC" = "no"; then
   AC_MSG_ERROR([cannot find swfdec-$SWFDEC_MAJORMINOR $SWFDEC_REQUIRES, which is required for build])
