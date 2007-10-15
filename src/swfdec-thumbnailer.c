@@ -48,7 +48,7 @@ main (int argc, char **argv)
   SwfdecPlayer *player;
   SwfdecLoader *loader;
   int width, height;
-  guint i, msecs;
+  guint i, msecs, total;
   cairo_surface_t *surface;
   cairo_t *cr;
 
@@ -95,9 +95,11 @@ main (int argc, char **argv)
   swfdec_player_set_size (player, size_output, size_output);
 
   // advance some more
-  for (i = 0; i < 10; i++) {
+  total = 0;
+  for (i = 0; i < 250 && total < 10000; i++) {
     msecs = swfdec_player_get_next_event (player);
     swfdec_player_advance (player, msecs);
+    total += msecs;
   }
 
   // render the image
