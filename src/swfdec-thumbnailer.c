@@ -22,6 +22,9 @@
 #endif
 #include <libswfdec/swfdec.h>
 
+static int size_output = 128;
+static char **filenames = NULL;
+
 static SwfdecPlayer *
 load_file (const char *filename)
 {
@@ -103,22 +106,53 @@ generate_image (SwfdecPlayer *player, const char *filename, int target_width,
   return TRUE;
 }
 
+static const GOptionEntry entries[] = {
+  {
+    "size", 's', 0, G_OPTION_ARG_INT, &size_output,
+    "Size of the thumbnail in pixels", NULL
+  },
+  {
+    G_OPTION_REMAINING, '\0', 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames,
+    NULL, "<INPUT FILE> <OUTPUT FILE>"
+  },
+  {
+    NULL
+  }
+};
+
 int
 main (int argc, char **argv)
 {
+  GOptionContext *context;
+  GError *err;
   SwfdecPlayer *player;
+
+  context = g_option_context_new ("Create a thumbnail for Flash file");
+  g_option_context_add_main_entries (context, entries, NULL);
+  g_type_init ();
+
+  if (g_option_context_parse (context, &argc, &argv, &err) == FALSE) {
+    g_printerr ("Couldn't parse command-line options: %s\n", err->message);
+    g_error_free (err);
+    return 1;
+  }
+
+  if (filenames == NULL || g_strv_length (filenames) != 2) {
+    g_printerr ("One input and one output filename required\n");
+    return 1;
+  }
 
   swfdec_init ();
 
-  if ((player = load_file ("test.swf")) == NULL)
+  if ((player = load_file (filenames[0])) == NULL)
     return 1;
 
-  if (seek_and_resize (player, 100, 100) == FALSE) {
+  if (seek_and_resize (player, size_output, size_output) == FALSE) {
     g_object_unref (player);
     return 2;
   }
 
-  if (generate_image (player, "test.png", 100, 100) == FALSE) {
+  if (generate_image (player, filenames[1], size_output, size_output) == FALSE) {
     g_object_unref (player);
     return 3;
   }
