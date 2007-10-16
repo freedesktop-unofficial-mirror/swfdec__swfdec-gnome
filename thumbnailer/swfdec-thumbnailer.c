@@ -83,6 +83,7 @@ main (int argc, char **argv)
   // get the image size of the file
   for (i = 0; i < 5; i++) {
     msecs = swfdec_player_get_next_event (player);
+    if (msecs == -1) msecs = 50;
     swfdec_player_advance (player, msecs);
     swfdec_player_get_image_size (player, &width, &height);
     if (width > 0 && height > 0)
@@ -96,6 +97,7 @@ main (int argc, char **argv)
   total = 0;
   for (i = 0; i < 250 && total < 10000; i++) {
     msecs = swfdec_player_get_next_event (player);
+    if (msecs == -1) msecs = 50;
     swfdec_player_advance (player, msecs);
     total += msecs;
   }
