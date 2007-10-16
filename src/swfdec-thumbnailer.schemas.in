@@ -1,0 +1,30 @@
+<gconfschemafile>
+  <schemalist>
+
+    <schema>
+      <key>/schemas/desktop/gnome/thumbnailers/application@x-shockwave-flash/enable</key>
+      <applyto>/desktop/gnome/thumbnailers/application@x-schockwave-flash/enable</applyto>
+      <owner>swfdec-thumbnailer</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+	<short>Enable thumbnailing of Flash files</short>
+	<long>Boolean options available, true enables thumbnailing and false disables the creation of new thumbnails</long>
+      </locale>
+    </schema>
+
+
+    <schema>
+      <key>/schemas/desktop/gnome/thumbnailers/application@x-shockwave-flash/command</key>
+      <applyto>/desktop/gnome/thumbnailers/application@x-shockwave-flash/command</applyto>
+      <owner>swfdec-thumbnailer</owner>
+      <type>string</type>
+      <default>swfdec-thumbnailer -s %s %i %o</default>
+      <locale name="C">
+	<short>Thumbnail command for Flash files</short>
+	<long>Valid command plus arguments for the Flash file thumbnailer. See nautilus thumbnailer documentation for more information.</long>
+      </locale>
+    </schema>
+
+  </schemalist>
+</gconfschemafile>
