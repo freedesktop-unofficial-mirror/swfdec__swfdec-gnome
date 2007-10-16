@@ -4,8 +4,8 @@ bin_PROGRAMS = swfdec-thumbnailer
 
 swfdec_thumbnailer_SOURCES = swfdec-thumbnailer.c
 
-INCLUDES = $(GLOBAL_CFLAGS) $(SWFDEC_CFLAGS)
-swfdec_thumbnailer_LDFLAGS = $(SWFDEC_LIBS)
+INCLUDES = $(GLOBAL_CFLAGS) $(THUMBNAILER_CFLAGS)
+swfdec_thumbnailer_LDFLAGS = $(THUMBNAILER_LIBS)
 
 schema_files = \
 	swfdec-thumbnailer.schemas.in
