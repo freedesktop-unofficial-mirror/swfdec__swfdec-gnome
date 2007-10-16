@@ -20,14 +20,12 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
 #include <gtk/gtk.h>
 #include <math.h>
 #include <libswfdec/swfdec.h>
 
 #include <libswfdec-gtk/swfdec-gtk.h>
-#if HAVE_GNOMEVFS
-#include <libgnomevfs/gnome-vfs.h>
-#endif
 
 static GMainLoop *loop = NULL;
 
@@ -105,7 +103,7 @@ main (int argc, char *argv[])
   SwfdecPlayer *player;
   GError *error = NULL;
   gboolean use_image = FALSE, no_sound = FALSE;
-  gboolean trace = FALSE, no_scripts = FALSE;
+  gboolean trace = FALSE;
   gboolean redraws = FALSE, gc = FALSE;
   char *variables = NULL;
   char *s;
@@ -114,7 +112,6 @@ main (int argc, char *argv[])
   GOptionEntry options[] = {
     { "always-gc", 'g', 0, G_OPTION_ARG_NONE, &gc, "run the garbage collector as often as possible", NULL },
     { "image", 'i', 0, G_OPTION_ARG_NONE, &use_image, "use an intermediate image surface for drawing", NULL },
-    { "no-scripts", 0, 0, G_OPTION_ARG_NONE, &no_scripts, "don't execute scripts affecting the application", NULL },
     { "no-sound", 'n', 0, G_OPTION_ARG_NONE, &no_sound, "don't play sound", NULL },
     { "redraws", 'r', 0, G_OPTION_ARG_NONE, &redraws, "show redraw regions", NULL },
     { "speed", 0, 0, G_OPTION_ARG_INT, &speed, "replay speed (will deactivate sound)", "PERCENT" },
@@ -166,9 +163,6 @@ main (int argc, char *argv[])
   set_title (GTK_WINDOW (window), argv[1]);
   if (redraws)
     gdk_window_set_debug_updates (TRUE);
-
-  if (!no_scripts)
-    g_signal_connect (player, "fscommand", G_CALLBACK (do_fscommand), window);
 
   swfdec_player_set_loader_with_variables (player, loader, variables);
 
