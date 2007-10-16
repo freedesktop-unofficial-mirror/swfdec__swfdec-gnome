@@ -26,7 +26,8 @@ stamp-h1
 player/.deps
 player/Makefile
 player/Makefile.in
-playey/*.o
+player/*.o
+player/swfdec-player
 po/.intltool-merge-cache
 po/Makefile.in.in
 po/POTFILES

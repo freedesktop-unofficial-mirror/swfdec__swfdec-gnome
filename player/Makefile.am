@@ -1,8 +1,8 @@
-bin_PROGRAMS = swfplay
+bin_PROGRAMS = swfdec-player
 
-swfplay_SOURCES = \
+swfdec_player_SOURCES = \
 	swfdec_slow_loader.c \
-	swfplay.c
+	swfdec-player.c
 
 INCLUDES = $(GLOBAL_CFLAGS) $(PLAYER_CFLAGS)
-swfplay_LDFLAGS = $(PLAYER_LIBS)
+swfdec_player_LDFLAGS = $(PLAYER_LIBS)
