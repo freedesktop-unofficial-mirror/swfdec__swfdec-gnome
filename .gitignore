@@ -23,6 +23,10 @@ Makefile.in
 missing
 mkinstalldirs
 stamp-h1
+player/.deps
+player/Makefile
+player/Makefile.in
+playey/*.o
 po/.intltool-merge-cache
 po/Makefile.in.in
 po/POTFILES
