@@ -27,9 +27,9 @@ po/.intltool-merge-cache
 po/Makefile.in.in
 po/POTFILES
 po/stamp-it.tmp
-src/.deps
-src/Makefile
-src/Makefile.in
-src/*.o
-src/swfdec-thumbnailer
-src/swfdec-thumbnailer.schemas
+thumbnailer/.deps
+thumbnailer/Makefile
+thumbnailer/Makefile.in
+thumbnailer/*.o
+thumbnailer/swfdec-thumbnailer
+thumbnailer/swfdec-thumbnailer.schemas
