@@ -23,23 +23,6 @@
 
 #include <libswfdec/swfdec.h>
 
-static int size_output = 128;
-static char **filenames = NULL;
-
-static const GOptionEntry entries[] = {
-  {
-    "size", 's', 0, G_OPTION_ARG_INT, &size_output,
-    "Size of the thumbnail in pixels (default 128)", NULL
-  },
-  {
-    G_OPTION_REMAINING, '\0', 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames,
-    NULL, "<INPUT FILE> <OUTPUT FILE>"
-  },
-  {
-    NULL
-  }
-};
-
 int
 main (int argc, char **argv)
 {
@@ -51,6 +34,21 @@ main (int argc, char **argv)
   guint i, msecs, total;
   cairo_surface_t *surface;
   cairo_t *cr;
+  int size_output = 128;
+  char **filenames = NULL;
+  const GOptionEntry entries[] = {
+    {
+      "size", 's', 0, G_OPTION_ARG_INT, &size_output,
+      "Size of the thumbnail in pixels (default 128)", NULL
+    },
+    {
+      G_OPTION_REMAINING, '\0', 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames,
+      NULL, "<INPUT FILE> <OUTPUT FILE>"
+    },
+    {
+      NULL
+    }
+  };
 
   // init
   context = g_option_context_new ("Create a thumbnail for Flash file");
