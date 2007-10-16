@@ -17,5 +17,10 @@ src/.deps
 src/Makefile
 src/Makefile.in
 src/swfdec-thumbnailer
+src/swfdec-thumbnailer.schemas
 src/*.o
 stamp-h1
+po/.intltool-merge-cache
+po/Makefile.in.in
+po/POTFILES
+po/stamp-it.tmp
