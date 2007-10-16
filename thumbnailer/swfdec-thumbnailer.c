@@ -1,5 +1,6 @@
 /* Swfdec Thumbnailer
- * Copyright (C) 2007 Pekka Lampila <pekka.lampila@iki.fi>
+ * Copyright (C) 2003, 2004 Bastien Nocera <hadess@hadess.net>
+ *                     2007 Pekka Lampila <pekka.lampila@iki.fi>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,6 +24,46 @@
 
 #include <libswfdec/swfdec.h>
 
+#define BORING_IMAGE_VARIANCE 256.0		/* Tweak this if necessary */
+
+/* Copied from totem-video-thumbnailer.c and ported from GdkPixbuf to cairo */
+/* This function attempts to detect images that are mostly solid images
+ * It does this by calculating the statistical variance of the
+ * black-and-white image */
+static gboolean
+is_image_interesting (cairo_surface_t *surface)
+{
+  /* We're gonna assume 8-bit samples. If anyone uses anything different,
+   * it doesn't really matter cause it's gonna be ugly anyways */
+  int rowstride = cairo_image_surface_get_stride (surface);
+  int height = cairo_image_surface_get_height (surface);
+  guchar* buffer = cairo_image_surface_get_data (surface);
+  int num_samples = (rowstride * height);
+  int i;
+  float x_bar = 0.0f;
+  float variance = 0.0f;
+
+  /* FIXME: If this proves to be a performance issue, this function
+   * can be modified to perhaps only check 3 rows. I doubt this'll
+   * be a problem though. */
+
+  /* Iterate through the image to calculate x-bar */
+  for (i = 0; i < num_samples; i++) {
+    x_bar += (float) buffer[i];
+  }
+  x_bar /= ((float) num_samples);
+
+  /* Calculate the variance */
+  for (i = 0; i < num_samples; i++) {
+    float tmp = ((float) buffer[i] - x_bar);
+    variance += tmp * tmp;
+  }
+  variance /= ((float) (num_samples - 1));
+
+  return (variance > BORING_IMAGE_VARIANCE);
+}
+
+
 int
 main (int argc, char **argv)
 {
@@ -31,7 +72,7 @@ main (int argc, char **argv)
   SwfdecPlayer *player;
   SwfdecLoader *loader;
   int width, height;
-  guint i, msecs, total;
+  guint try, i, msecs, total;
   cairo_surface_t *surface;
   cairo_t *cr;
   int size_output = 128;
@@ -93,28 +134,37 @@ main (int argc, char **argv)
   // resize player to target size
   swfdec_player_set_size (player, size_output, size_output);
 
-  // advance some more
-  total = 0;
-  for (i = 0; i < 250 && total < 10000; i++) {
+  // skip the start
+  for (i = 0, total = 0; i < 1000 && total < 10000; i++) {
     msecs = swfdec_player_get_next_event (player);
     if (msecs == -1) msecs = 50;
     swfdec_player_advance (player, msecs);
     total += msecs;
   }
 
-  // render the image
-  swfdec_player_get_size (player, &width, &height);
-  g_return_val_if_fail (width > 0 && height > 0, 1);
-
   surface =
     cairo_image_surface_create (CAIRO_FORMAT_ARGB32, size_output, size_output);
-
   cr = cairo_create (surface);
-  cairo_scale (cr, width / size_output, height / size_output);
-  swfdec_player_render (player, cr, 0, 0, width, height);
-  cairo_destroy (cr);
+
+  // render the image
+  try = 1;
+  do {
+    for (i = 0, total = 0; i < 100 && total < 1000; i++) {
+      msecs = swfdec_player_get_next_event (player);
+      if (msecs == -1) msecs = 50;
+      swfdec_player_advance (player, msecs);
+      total += msecs;
+    }
+
+    swfdec_player_get_size (player, &width, &height);
+    g_return_val_if_fail (width > 0 && height > 0, 1);
+
+    cairo_scale (cr, width / size_output, height / size_output);
+    swfdec_player_render (player, cr, 0, 0, width, height);
+  } while (!is_image_interesting (surface) && try++ < 10);
 
   cairo_surface_write_to_png (surface, filenames[1]);
+  cairo_destroy (cr);
   cairo_surface_destroy (surface);
 
   g_object_unref (player);
