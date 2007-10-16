@@ -29,8 +29,6 @@
 #include <libgnomevfs/gnome-vfs.h>
 #endif
 
-#include "swfdec_slow_loader.h"
-
 static GMainLoop *loop = NULL;
 
 static void
@@ -102,7 +100,6 @@ sanitize_url (const char *s)
 int 
 main (int argc, char *argv[])
 {
-  int delay = 0;
   int speed = 100;
   SwfdecLoader *loader;
   SwfdecPlayer *player;
@@ -116,7 +113,6 @@ main (int argc, char *argv[])
 
   GOptionEntry options[] = {
     { "always-gc", 'g', 0, G_OPTION_ARG_NONE, &gc, "run the garbage collector as often as possible", NULL },
-    { "delay", 'd', 0, G_OPTION_ARG_INT, &delay, "make loading of resources take time", "SECS" },
     { "image", 'i', 0, G_OPTION_ARG_NONE, &use_image, "use an intermediate image surface for drawing", NULL },
     { "no-scripts", 0, 0, G_OPTION_ARG_NONE, &no_scripts, "don't execute scripts affecting the application", NULL },
     { "no-sound", 'n', 0, G_OPTION_ARG_NONE, &no_sound, "don't play sound", NULL },
@@ -173,9 +169,6 @@ main (int argc, char *argv[])
 
   if (!no_scripts)
     g_signal_connect (player, "fscommand", G_CALLBACK (do_fscommand), window);
-  
-  if (delay) 
-    loader = swfdec_slow_loader_new (loader, delay);
 
   swfdec_player_set_loader_with_variables (player, loader, variables);
 
