@@ -9,7 +9,6 @@ else
 fi
 
 AM_INIT_AUTOMAKE(1.6)
-dnl AC_CANONICAL_TARGET([])
 AM_MAINTAINER_MODE
 
 SWFDEC_MAJORMINOR=0.5
@@ -20,14 +19,14 @@ AC_SUBST(ACLOCAL_AMFLAGS, "-I m4")
 
 dnl decide on error flags
 dnl if we support them, we set them unconditionally
-AS_COMPILER_FLAG(-Wall, GLOBAL_CFLAGS="-Wall", GLOBAL_CFLAGS="")
+dnl AS_COMPILER_FLAG(-Wall, GLOBAL_CFLAGS="-Wall", GLOBAL_CFLAGS="")
 dnl I want this but stupid headers don't let me
 dnl AS_COMPILER_FLAG(-Wshadow, GLOBAL_CFLAGS="$GLOBAL_CFLAGS -Wshadow")
-AS_COMPILER_FLAG(-Wextra -Wno-missing-field-initializers -Wno-unused-parameter, GLOBAL_CFLAGS="$GLOBAL_CFLAGS -Wextra -Wno-missing-field-initializers -Wno-unused-parameter")
+dnl AS_COMPILER_FLAG(-Wextra -Wno-missing-field-initializers -Wno-unused-parameter, GLOBAL_CFLAGS="$GLOBAL_CFLAGS -Wextra -Wno-missing-field-initializers -Wno-unused-parameter")
 dnl if we're in nano >= 1, add -Werror if supported
-if test x$SWFDEC_CVS = xyes ; then
-  AS_COMPILER_FLAG(-Werror, GLOBAL_CFLAGS="$GLOBAL_CFLAGS -Werror")
-fi
+dnl if test x$SWFDEC_CVS = xyes ; then
+dnl  AS_COMPILER_FLAG(-Werror, GLOBAL_CFLAGS="$GLOBAL_CFLAGS -Werror")
+dnl fi
 
 AC_PROG_CC
 
@@ -44,6 +43,17 @@ if test "$HAVE_SWFDEC" = "no"; then
 fi
 AC_SUBST(SWFDEC_LIBS)
 AC_SUBST(SWFDEC_CFLAGS)
+
+dnl Something
+IT_PROG_INTLTOOL([0.35.0])
+
+dnl GConf configuration
+AM_GCONF_SOURCE_2
+
+AC_PATH_PROG([GCONFTOOL], [gconftool-2], [no])
+if test "x$GCONFTOOL" = "xno"; then
+	AC_MSG_ERROR([gconftool-2 executable not found in your path - should be installed with GConf])
+fi
 
 AC_SUBST(GLOBAL_CFLAGS)
 
