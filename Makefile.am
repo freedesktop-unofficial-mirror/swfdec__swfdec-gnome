@@ -1,5 +1,12 @@
-SUBDIRS = player thumbnailer
-EXTRA_DIST = autogen.sh swfdec-player.desktop.in swfdec.xml
+SUBDIRS = player thumbnailer po
+
+EXTRA_DIST =			\
+	autogen.sh		\
+	intltool-extract.in	\
+	intltool-merge.in	\
+	intltool-update.in	\
+	swfdec-player.desktop.in\
+	swfdec.xml
 
 desktop_in_files = swfdec-player.desktop.in
 desktopdir = $(datadir)/applications

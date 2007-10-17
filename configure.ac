@@ -51,6 +51,6 @@ dnl Finish up
 
 AC_SUBST(GLOBAL_CFLAGS)
 
-AC_CONFIG_FILES(Makefile player/Makefile thumbnailer/Makefile)
+AC_CONFIG_FILES(Makefile player/Makefile thumbnailer/Makefile po/Makefile.in)
 
 AC_OUTPUT
