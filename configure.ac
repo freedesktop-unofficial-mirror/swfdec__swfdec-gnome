@@ -1,5 +1,5 @@
 AC_PREREQ([2.58])
-AC_INIT(swfdec-thumbnailer, 0.5.3.1)
+AC_INIT(swfdec-gnome, 0.5.3.1)
 
 AM_INIT_AUTOMAKE(1.6)
 AM_CONFIG_HEADER(config.h)
@@ -20,7 +20,7 @@ dnl GTK_DOC_CHECK(1.0)
 
 dnl Setup gettext
 
-GETTEXT_PACKAGE=swfdec-thumbnailer
+GETTEXT_PACKAGE=swfdec-gnome
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE],["$GETTEXT_PACKAGE"],[Gettext package])
 AM_GLIB_GNU_GETTEXT
