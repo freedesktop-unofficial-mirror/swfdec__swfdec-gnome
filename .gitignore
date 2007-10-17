@@ -23,7 +23,7 @@ Makefile.in
 missing
 mkinstalldirs
 stamp-h1
-swfdec-player.dekstop
+swfdec-player.desktop
 player/.deps
 player/Makefile
 player/Makefile.in
@@ -32,6 +32,7 @@ player/swfdec-player
 po/.intltool-merge-cache
 po/Makefile.in.in
 po/POTFILES
+po/stamp-it
 po/stamp-it.tmp
 thumbnailer/.deps
 thumbnailer/Makefile
