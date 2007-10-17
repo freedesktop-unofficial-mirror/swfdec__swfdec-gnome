@@ -7,5 +7,5 @@ Terminal=false
 Type=Application
 StartupNotify=true
 Categories=GNOME;GTK;AudioVideo;Video;Player;
-MimeType=application/x-shockwave-flash;application/futuresplash;video/x-flv;
+MimeType=application/x-shockwave-flash;application/futuresplash;
 
