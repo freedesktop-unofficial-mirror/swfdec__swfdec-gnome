@@ -1,11 +1,11 @@
 [Desktop Entry]
-_Name=swf-player
-_Comment=Gtk based desktop Flash player
-Exec=swfplay %U
-Icon=swfplay
+_Name=Swfdec Flash Player
+_Comment=Play Adobe Flash files
+Exec=swfdec-player %U
+Icon=swfdec-player
 Terminal=false
 Type=Application
-StartupNotify=false
+StartupNotify=true
 Categories=GNOME;GTK;AudioVideo;Video;Player;
 MimeType=application/x-shockwave-flash;application/futuresplash;video/x-flv;
 
