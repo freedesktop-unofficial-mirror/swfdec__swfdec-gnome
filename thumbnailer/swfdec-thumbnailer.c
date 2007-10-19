@@ -63,7 +63,6 @@ is_image_interesting (cairo_surface_t *surface)
   return (variance > BORING_IMAGE_VARIANCE);
 }
 
-
 int
 main (int argc, char **argv)
 {
@@ -72,7 +71,7 @@ main (int argc, char **argv)
   SwfdecPlayer *player;
   SwfdecLoader *loader;
   int width, height;
-  float ratio, offset_x, offset_y;
+  double scale, scaled_size, x, y, w, h;
   guint try, i, msecs, total;
   cairo_surface_t *surface;
   cairo_t *cr;
@@ -134,6 +133,36 @@ main (int argc, char **argv)
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, size, size);
   cr = cairo_create (surface);
 
+  // get image size
+  swfdec_player_get_image_size (player, &width, &height);
+  if (width == 0 || height == 0) {
+    /* force a size if the player doesn't have a default one */
+    swfdec_player_set_size (player, size, size);
+    width = height = size;
+  }
+
+  // determine amount of scaling to apply
+  if (width > 2 * height) {
+    scale = 0.5 * size / height;
+  } else  if (height > 2 * width) {
+    scale = 0.5 * size / width;
+  } else {
+    scale = (double) size / MAX (width, height);
+  }
+
+  // determine necessary translation to get image centered
+  scaled_size = size / scale;
+  x = (width - scaled_size) / 2;
+  y = (height - scaled_size) / 2;
+  cairo_scale (cr, scale, scale);
+  cairo_translate (cr, -x, -y);
+
+  // compute part to render
+  x = MAX (x, 0);
+  y = MAX (y, 0);
+  w = MIN (width, scaled_size);
+  h = MIN (height, scaled_size);
+
   // render the image
   try = 1;
   do {
@@ -145,24 +174,14 @@ main (int argc, char **argv)
       total += msecs;
     }
 
-    swfdec_player_get_image_size (player, &width, &height);
-    g_return_val_if_fail (width > 0 && height > 0, 1);
-
-    ratio = MIN (size / (float)width, size / (float)height);
-    offset_x = (width * ratio - size) / 2 / ratio;
-    offset_y = (height * ratio - size) / 2 / ratio;
-
-    cairo_scale (cr, ratio, ratio);
-    cairo_translate (cr, -offset_x, -offset_y);
-    swfdec_player_render (player, cr, offset_x, offset_y, size / ratio,
-	size / ratio);
+    swfdec_player_render (player, cr, x, y, w, h);
   } while (msecs != -1 && !is_image_interesting (surface) && try++ < 10);
 
-  cairo_surface_write_to_png (surface, filenames[1]);
   cairo_destroy (cr);
-  cairo_surface_destroy (surface);
-
   g_object_unref (player);
+
+  cairo_surface_write_to_png (surface, filenames[1]);
+  cairo_surface_destroy (surface);
 
   return 0;
 }
