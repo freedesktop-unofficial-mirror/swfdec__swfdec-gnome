@@ -3,7 +3,7 @@
 
     <schema>
       <key>/schemas/desktop/gnome/thumbnailers/application@x-shockwave-flash/enable</key>
-      <applyto>/desktop/gnome/thumbnailers/application@x-schockwave-flash/enable</applyto>
+      <applyto>/desktop/gnome/thumbnailers/application@x-shockwave-flash/enable</applyto>
       <owner>swfdec-thumbnailer</owner>
       <type>bool</type>
       <default>true</default>
