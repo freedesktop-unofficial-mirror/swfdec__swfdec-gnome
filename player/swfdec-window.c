@@ -66,6 +66,8 @@ swfdec_window_init (SwfdecWindow *window)
 gboolean
 swfdec_window_set_url (SwfdecWindow *window, const char *url)
 {
+  GObject *o;
+
   g_return_val_if_fail (SWFDEC_IS_WINDOW (window), FALSE);
   g_return_val_if_fail (url != NULL, FALSE);
 
@@ -73,8 +75,11 @@ swfdec_window_set_url (SwfdecWindow *window, const char *url)
     return FALSE;
 
   window->loader = swfdec_gtk_loader_new (url);
-  window->player = swfdec_player_new (NULL);
+  window->player = swfdec_gtk_player_new (NULL);
   swfdec_player_set_loader (window->player, window->loader);
+  swfdec_gtk_player_set_playing (SWFDEC_GTK_PLAYER (window->player), TRUE);
+  o = gtk_builder_get_object (window->builder, "player-widget");
+  swfdec_gtk_widget_set_player (SWFDEC_GTK_WIDGET (o), window->player);
 
   return TRUE;
 }
