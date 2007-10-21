@@ -86,6 +86,8 @@
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
   <property name="resizable">True</property>
+  <property name="default-width">300</property>
+  <property name="default-height">200</property>
   <property name="destroy_with_parent">False</property>
   <property name="decorated">True</property>
   <property name="icon-name">swfdec</property>
