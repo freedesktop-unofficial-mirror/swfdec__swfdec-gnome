@@ -30,6 +30,23 @@ G_DEFINE_TYPE (SwfdecWindow, swfdec_window, G_TYPE_OBJECT)
 static GSList *windows = NULL;
 
 static void
+swfdec_window_dispose (GObject *object)
+{
+  SwfdecWindow *window = SWFDEC_WINDOW (object);
+
+  if (window->builder) {
+    g_object_unref (window->builder);
+    window->builder = NULL;
+  }
+  if (window->player) {
+    g_object_unref (window->player);
+    window->player = NULL;
+  }
+
+  G_OBJECT_CLASS (swfdec_window_parent_class)->dispose (object);
+}
+
+static void
 swfdec_window_finalize (GObject *object)
 {
   G_OBJECT_CLASS (swfdec_window_parent_class)->finalize (object);
@@ -44,6 +61,7 @@ swfdec_window_class_init (SwfdecWindowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->dispose = swfdec_window_dispose;
   object_class->finalize = swfdec_window_finalize;
 }
 
