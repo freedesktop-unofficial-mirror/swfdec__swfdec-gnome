@@ -46,4 +46,5 @@ menu_help_about (GtkAction *action, SwfdecWindow *window)
 gboolean
 main_window_destroy_cb (GtkWidget *widget, GdkEvent *event, SwfdecWindow *window)
 {
+  return FALSE;
 }
