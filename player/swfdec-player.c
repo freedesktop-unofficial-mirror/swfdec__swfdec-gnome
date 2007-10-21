@@ -59,6 +59,7 @@ main (int argc, char *argv[])
   };
   GOptionContext *ctx;
 
+  g_set_application_name (_("Swfdec Flash Player"));
   ctx = g_option_context_new ("");
   g_option_context_set_translation_domain (ctx, GETTEXT_PACKAGE);
   g_option_context_add_main_entries (ctx, options, "options");
