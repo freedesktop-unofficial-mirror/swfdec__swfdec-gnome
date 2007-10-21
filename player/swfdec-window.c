@@ -24,15 +24,34 @@
 #include <glib/gi18n.h>
 #include "swfdec-window.h"
 
-struct _SwfdecWindow {
-  gboolean		error;		/* TRUE if we're in error */
-  GtkBuilder *		builder;	/* builder instance to load from */
-  GtkWidget *		window;		/* the toplevel window */
-  SwfdecPlayer *	player;		/* the player we show or NULL if not initialized yet */
-  SwfdecLoader *	loader;		/* the loader we use to load the content or NULL if not initialized yet */
-};
+G_DEFINE_TYPE (SwfdecWindow, swfdec_window, G_TYPE_OBJECT)
 
-#define SWFDEC_IS_WINDOW(window) ((window) != NULL)
+/* global list of windows */
+static GSList *windows = NULL;
+
+static void
+swfdec_window_finalize (GObject *object)
+{
+  G_OBJECT_CLASS (swfdec_window_parent_class)->finalize (object);
+
+  windows = g_slist_remove (windows, object);
+  if (windows == NULL)
+    gtk_main_quit ();
+}
+
+static void
+swfdec_window_class_init (SwfdecWindowClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->finalize = swfdec_window_finalize;
+}
+
+static void
+swfdec_window_init (SwfdecWindow *window)
+{
+  windows = g_slist_prepend (windows, window);
+}
 
 /**
  * swfdec_window_set_url:
@@ -116,3 +135,4 @@ swfdec_window_new (const char *url)
 
   return window;
 }
+

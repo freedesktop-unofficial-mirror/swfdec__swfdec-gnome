@@ -17,15 +17,39 @@
  * Boston, MA  02110-1301  USA
  */
 
-#ifndef __SWFDEC_WINDOW_H__
-#define __SWFDEC_WINDOW_H__
-
 #include <gtk/gtk.h>
 #include <libswfdec/swfdec.h>
 #include <libswfdec-gtk/swfdec-gtk.h>
 
-typedef struct _SwfdecWindow SwfdecWindow;
+#ifndef __SWFDEC_WINDOW_H__
+#define __SWFDEC_WINDOW_H__
 
+
+typedef struct _SwfdecWindow SwfdecWindow;
+typedef struct _SwfdecWindowClass SwfdecWindowClass;
+
+#define SWFDEC_TYPE_WINDOW                    (swfdec_window_get_type())
+#define SWFDEC_IS_WINDOW(obj)                 (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SWFDEC_TYPE_WINDOW))
+#define SWFDEC_IS_WINDOW_CLASS(klass)         (G_TYPE_CHECK_CLASS_TYPE ((klass), SWFDEC_TYPE_WINDOW))
+#define SWFDEC_WINDOW(obj)                    (G_TYPE_CHECK_INSTANCE_CAST ((obj), SWFDEC_TYPE_WINDOW, SwfdecWindow))
+#define SWFDEC_WINDOW_CLASS(klass)            (G_TYPE_CHECK_CLASS_CAST ((klass), SWFDEC_TYPE_WINDOW, SwfdecWindowClass))
+#define SWFDEC_WINDOW_GET_CLASS(obj)          (G_TYPE_INSTANCE_GET_CLASS ((obj), SWFDEC_TYPE_WINDOW, SwfdecWindowClass))
+
+struct _SwfdecWindow
+{
+  GObject		object;
+
+  gboolean		error;		/* TRUE if we're in error */
+  GtkBuilder *		builder;	/* builder instance to load from */
+  GtkWidget *		window;		/* the toplevel window */
+  SwfdecPlayer *	player;		/* the player we show or NULL if not initialized yet */
+  SwfdecLoader *	loader;		/* the loader we use to load the content or NULL if not initialized yet */
+};
+
+struct _SwfdecWindowClass
+{
+  GObjectClass		object_class;
+};
 
 SwfdecWindow *	swfdec_window_new		(const char *	url);
 
@@ -34,4 +58,6 @@ gboolean	swfdec_window_set_url		(SwfdecWindow *	window,
 void		swfdec_window_error		(SwfdecWindow *	window,
 						 const char *	msg);
 
+
+G_END_DECLS
 #endif
