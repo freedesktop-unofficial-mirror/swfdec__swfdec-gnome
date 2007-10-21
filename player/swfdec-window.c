@@ -90,6 +90,7 @@ swfdec_window_set_url (SwfdecWindow *window, const char *url)
 {
   SwfdecWindowSettings settings;
   GObject *o;
+  char *s;
 
   g_return_val_if_fail (SWFDEC_IS_WINDOW (window), FALSE);
   g_return_val_if_fail (url != NULL, FALSE);
@@ -102,6 +103,9 @@ swfdec_window_set_url (SwfdecWindow *window, const char *url)
   swfdec_player_set_loader (window->player, window->loader);
   o = gtk_builder_get_object (window->builder, "player-widget");
   swfdec_gtk_widget_set_player (SWFDEC_GTK_WIDGET (o), window->player);
+  s = swfdec_loader_get_filename (window->loader);
+  gtk_window_set_title (GTK_WINDOW (window->window), s);
+  g_free (s);
   /* cute little hack to apply the settings without lots of code */
   settings = window->settings;
   window->settings = default_settings;
