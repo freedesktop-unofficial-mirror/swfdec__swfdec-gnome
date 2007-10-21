@@ -116,7 +116,7 @@ swfdec_window_new (const char *url)
   GError *error = NULL;
   SwfdecWindow *window;
 
-  window = g_slice_new0 (SwfdecWindow);
+  window = g_object_new (SWFDEC_TYPE_WINDOW, NULL);
   window->builder = gtk_builder_new ();
   gtk_builder_set_translation_domain (window->builder, GETTEXT_PACKAGE);
   if (!gtk_builder_add_from_file (window->builder, BUILDER_FILE, &error)) {
