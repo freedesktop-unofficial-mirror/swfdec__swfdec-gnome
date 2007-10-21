@@ -36,6 +36,7 @@ menu_file_play (GtkAction *action, SwfdecWindow *window)
 void
 menu_file_close (GtkAction *action, SwfdecWindow *window)
 {
+  gtk_widget_destroy (window->window);
 }
 
 void
