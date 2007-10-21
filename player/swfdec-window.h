@@ -26,6 +26,7 @@
 
 
 typedef struct _SwfdecWindow SwfdecWindow;
+typedef struct _SwfdecWindowSettings SwfdecWindowSettings;
 typedef struct _SwfdecWindowClass SwfdecWindowClass;
 
 #define SWFDEC_TYPE_WINDOW                    (swfdec_window_get_type())
@@ -34,6 +35,12 @@ typedef struct _SwfdecWindowClass SwfdecWindowClass;
 #define SWFDEC_WINDOW(obj)                    (G_TYPE_CHECK_INSTANCE_CAST ((obj), SWFDEC_TYPE_WINDOW, SwfdecWindow))
 #define SWFDEC_WINDOW_CLASS(klass)            (G_TYPE_CHECK_CLASS_CAST ((klass), SWFDEC_TYPE_WINDOW, SwfdecWindowClass))
 #define SWFDEC_WINDOW_GET_CLASS(obj)          (G_TYPE_INSTANCE_GET_CLASS ((obj), SWFDEC_TYPE_WINDOW, SwfdecWindowClass))
+
+struct _SwfdecWindowSettings
+{
+  gboolean		playing;	/* TRUE if this window should be playing automagically */
+  gboolean		sound;		/* TRUE if sund is active */
+};
 
 struct _SwfdecWindow
 {
@@ -44,6 +51,7 @@ struct _SwfdecWindow
   GtkWidget *		window;		/* the toplevel window */
   SwfdecPlayer *	player;		/* the player we show or NULL if not initialized yet */
   SwfdecLoader *	loader;		/* the loader we use to load the content or NULL if not initialized yet */
+  SwfdecWindowSettings	settings;	/* the settings that apply to this window */
 };
 
 struct _SwfdecWindowClass
@@ -51,12 +59,14 @@ struct _SwfdecWindowClass
   GObjectClass		object_class;
 };
 
-SwfdecWindow *	swfdec_window_new		(const char *	url);
+SwfdecWindow *	swfdec_window_new		(const char *			url);
 
-gboolean	swfdec_window_set_url		(SwfdecWindow *	window,
-						 const char *	url);
-void		swfdec_window_error		(SwfdecWindow *	window,
-						 const char *	msg);
+gboolean	swfdec_window_set_url		(SwfdecWindow *			window,
+						 const char *			url);
+void		swfdec_window_error		(SwfdecWindow *			window,
+						 const char *			msg);
+void		swfdec_window_set_settings	(SwfdecWindow *			window,
+						 const SwfdecWindowSettings *	settings);
 
 
 G_END_DECLS

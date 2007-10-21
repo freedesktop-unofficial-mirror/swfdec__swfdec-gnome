@@ -28,6 +28,8 @@ G_DEFINE_TYPE (SwfdecWindow, swfdec_window, G_TYPE_OBJECT)
 
 /* global list of windows */
 static GSList *windows = NULL;
+/* the default settings */
+static const SwfdecWindowSettings default_settings = { FALSE, TRUE };
 
 static void
 swfdec_window_dispose (GObject *object)
@@ -68,6 +70,8 @@ swfdec_window_class_init (SwfdecWindowClass *klass)
 static void
 swfdec_window_init (SwfdecWindow *window)
 {
+  window->settings = default_settings;
+
   windows = g_slist_prepend (windows, window);
 }
 
@@ -84,6 +88,7 @@ swfdec_window_init (SwfdecWindow *window)
 gboolean
 swfdec_window_set_url (SwfdecWindow *window, const char *url)
 {
+  SwfdecWindowSettings settings;
   GObject *o;
 
   g_return_val_if_fail (SWFDEC_IS_WINDOW (window), FALSE);
@@ -95,9 +100,12 @@ swfdec_window_set_url (SwfdecWindow *window, const char *url)
   window->loader = swfdec_gtk_loader_new (url);
   window->player = swfdec_gtk_player_new (NULL);
   swfdec_player_set_loader (window->player, window->loader);
-  swfdec_gtk_player_set_playing (SWFDEC_GTK_PLAYER (window->player), TRUE);
   o = gtk_builder_get_object (window->builder, "player-widget");
   swfdec_gtk_widget_set_player (SWFDEC_GTK_WIDGET (o), window->player);
+  /* cute little hack to apply the settings without lots of code */
+  settings = window->settings;
+  window->settings = default_settings;
+  swfdec_window_set_settings (window, &settings);
 
   return TRUE;
 }
@@ -158,5 +166,25 @@ swfdec_window_new (const char *url)
   }
 
   return window;
+}
+
+void
+swfdec_window_set_settings (SwfdecWindow *window, const SwfdecWindowSettings *settings)
+{
+  SwfdecWindowSettings *org;
+
+  g_return_if_fail (SWFDEC_IS_WINDOW (window));
+  g_return_if_fail (settings != NULL);
+
+  if (window->settings.playing != settings->playing) {
+    GtkToggleAction *action = GTK_TOGGLE_ACTION (gtk_builder_get_object (window->builder, "play"));
+    gtk_toggle_action_set_active (action, settings->playing);
+    g_assert (window->settings.playing == settings->playing);
+  }
+  if (window->settings.sound != settings->sound) {
+    GtkToggleAction *action = GTK_TOGGLE_ACTION (gtk_builder_get_object (window->builder, "mute"));
+    gtk_toggle_action_set_active (action, !settings->sound);
+    g_assert (window->settings.sound == settings->sound);
+  }
 }
 

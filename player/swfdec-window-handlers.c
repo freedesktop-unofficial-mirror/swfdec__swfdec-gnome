@@ -29,8 +29,21 @@ menu_file_open (GtkAction *action, SwfdecWindow *window)
 }
 
 void
-menu_file_play (GtkAction *action, SwfdecWindow *window)
+menu_file_play (GtkToggleAction *action, SwfdecWindow *window)
 {
+  if (window->player) {
+    swfdec_gtk_player_set_playing (SWFDEC_GTK_PLAYER (window->player), 
+	gtk_toggle_action_get_active (action));
+  }
+}
+
+void
+menu_file_mute (GtkToggleAction *action, SwfdecWindow *window)
+{
+  if (window->player) {
+    swfdec_gtk_player_set_audio_enabled (SWFDEC_GTK_PLAYER (window->player),
+	!gtk_toggle_action_get_active (action));
+  }
 }
 
 void

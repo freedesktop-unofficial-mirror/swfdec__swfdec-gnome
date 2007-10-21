@@ -21,13 +21,21 @@
             <accelerator key="O" modifiers="GDK_CONTROL_MASK"/>
          </child>
          <child>
-            <object class="GtkAction" id="play">
+            <object class="GtkToggleAction" id="play">
                <property name="label">Play / P_ause</property>
                <property name="stock-id">gtk-media-play</property>
                <property name="tooltip">Play or pause the file</property>
-               <signal name="activate" handler="menu_file_play"/>
+               <signal name="toggled" handler="menu_file_play"/>
             </object>
             <accelerator key="space" modifiers="GDK_CONTROL_MASK"/>
+         </child>
+         <child>
+            <object class="GtkToggleAction" id="mute">
+               <property name="label">Mute</property>
+               <property name="tooltip">Mute sound output</property>
+               <signal name="toggled" handler="menu_file_mute"/>
+            </object>
+            <accelerator key="M" modifiers="GDK_CONTROL_MASK"/>
          </child>
          <child>
             <object class="GtkAction" id="quit">
