@@ -21,11 +21,47 @@
 #include "config.h"
 #endif
 
+#include <glib/gi18n.h>
+
 #include "swfdec-window.h"
+
+static void
+menu_file_open_response (GtkFileChooser *chooser, gint response, SwfdecWindow *window)
+{
+  if (response == GTK_RESPONSE_ACCEPT) {
+    char *target = gtk_file_chooser_get_filename (chooser);
+    if (target != NULL) {
+      char *url = g_strconcat ("file://", target, NULL);
+
+      if (!swfdec_window_set_url (window, url)) {
+	SwfdecWindow *new = swfdec_window_new (url);
+	swfdec_window_set_settings (new, &window->settings);
+      }
+      g_free (url);
+      g_free (target);
+    }
+  }
+    
+  gtk_widget_destroy (GTK_WIDGET (chooser));
+  return;
+}
 
 void
 menu_file_open (GtkAction *action, SwfdecWindow *window)
 {
+  GtkWidget *chooser;
+
+  chooser = gtk_file_chooser_dialog_new (_("Select a file to play"),
+      GTK_WINDOW (window->window), 
+      GTK_FILE_CHOOSER_ACTION_OPEN, 
+      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+      GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
+  gtk_dialog_set_default_response (GTK_DIALOG (chooser), GTK_RESPONSE_ACCEPT);
+
+  g_object_ref (window);
+  g_signal_connect (chooser, "response", G_CALLBACK (menu_file_open_response), window);
+  g_object_weak_ref (G_OBJECT (chooser), (GWeakNotify) g_object_unref, window);
+  gtk_window_present (GTK_WINDOW (chooser));
 }
 
 void
