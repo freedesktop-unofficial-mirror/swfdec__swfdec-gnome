@@ -45,15 +45,16 @@ sanitize_url (const char *s)
 int 
 main (int argc, char *argv[])
 {
+  SwfdecWindowSettings settings = { TRUE, TRUE };
   GError *error = NULL;
-  gboolean paused = FALSE, no_sound = FALSE;
   char **filenames = NULL;
+  SwfdecWindow *window;
   guint i;
   char *s;
 
   GOptionEntry options[] = {
-    { "no-sound", 'n', 0, G_OPTION_ARG_NONE, &no_sound, N_("don't play sound"), NULL },
-    { "paused", 'p', 0, G_OPTION_ARG_NONE, &paused, N_("start player paused"), NULL },
+    { "no-sound", 'n', G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &settings.sound, N_("don't play sound"), NULL },
+    { "paused", 'p', G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &settings.playing, N_("start player paused"), NULL },
     { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_STRING_ARRAY, &filenames, NULL, "<FILE> [<FILE> ...]" },
     { NULL }
   };
@@ -77,11 +78,14 @@ main (int argc, char *argv[])
 
   if (filenames == NULL) {
     /* open an empty window if no args */
-    swfdec_window_new (NULL);
+    window = swfdec_window_new (NULL);
+    swfdec_window_set_settings (window, &settings);
   } else {
     for (i = 0; filenames[i]; i++) {
       s = sanitize_url (filenames[i]);
-      swfdec_window_new (s);
+      window = swfdec_window_new (s);
+      g_free (s);
+      swfdec_window_set_settings (window, &settings);
     }
     g_strfreev (filenames);
   }

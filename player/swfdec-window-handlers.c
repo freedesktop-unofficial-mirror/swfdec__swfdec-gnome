@@ -31,18 +31,20 @@ menu_file_open (GtkAction *action, SwfdecWindow *window)
 void
 menu_file_play (GtkToggleAction *action, SwfdecWindow *window)
 {
+  window->settings.playing = gtk_toggle_action_get_active (action);
   if (window->player) {
     swfdec_gtk_player_set_playing (SWFDEC_GTK_PLAYER (window->player), 
-	gtk_toggle_action_get_active (action));
+	window->settings.playing);
   }
 }
 
 void
 menu_file_mute (GtkToggleAction *action, SwfdecWindow *window)
 {
+  window->settings.sound = !gtk_toggle_action_get_active (action);
   if (window->player) {
     swfdec_gtk_player_set_audio_enabled (SWFDEC_GTK_PLAYER (window->player),
-	!gtk_toggle_action_get_active (action));
+	window->settings.sound);
   }
 }
 

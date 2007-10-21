@@ -69,6 +69,7 @@
             <placeholder name="recent-placeholder"/>
             <separator/>
             <menuitem name="play" action="play"/>
+            <menuitem name="mute" action="mute"/>
             <separator/>
             <menuitem name="quit" action="quit"/>
          </menu>
