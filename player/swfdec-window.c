@@ -101,15 +101,16 @@ swfdec_window_set_url (SwfdecWindow *window, const char *url)
   window->loader = swfdec_gtk_loader_new (url);
   window->player = swfdec_gtk_player_new (NULL);
   swfdec_player_set_loader (window->player, window->loader);
+  swfdec_gtk_player_set_audio_enabled (SWFDEC_GTK_PLAYER (window->player), 
+      window->settings.sound);
   o = gtk_builder_get_object (window->builder, "player-widget");
   swfdec_gtk_widget_set_player (SWFDEC_GTK_WIDGET (o), window->player);
   s = swfdec_loader_get_filename (window->loader);
   gtk_window_set_title (GTK_WINDOW (window->window), s);
   g_free (s);
-  /* cute little hack to apply the settings without lots of code */
-  settings = window->settings;
-  window->settings = default_settings;
-  swfdec_window_set_settings (window, &settings);
+  /* do this at the end to not get lag */
+  swfdec_gtk_player_set_playing (SWFDEC_GTK_PLAYER (window->player), 
+      window->settings.playing);
 
   return TRUE;
 }
