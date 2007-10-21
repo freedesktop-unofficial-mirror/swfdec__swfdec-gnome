@@ -42,6 +42,24 @@ menu_file_close (GtkAction *action, SwfdecWindow *window)
 void
 menu_help_about (GtkAction *action, SwfdecWindow *window)
 {
+  static const char *authors[] = {
+    "Benjamin Otte <otte@gnome.org>",
+    "Pekka Lampila <pekka.lampila@iki.fi>",
+    NULL,
+  };
+  static const char *artists[] = {
+    "Cristian Grada <krigenator@gmail.com>",
+    NULL
+  };
+
+  gtk_show_about_dialog (NULL, 
+      "logo-icon-name", "swfdec",
+      "authors", authors,
+      "artists", artists,
+      "comments", "Play Adobe Flash files",
+      "version", VERSION,
+      "website", "http://swfdec.freedesktop.org/",
+      NULL);
 }
 
 gboolean
