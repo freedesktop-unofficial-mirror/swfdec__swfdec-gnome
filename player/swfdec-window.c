@@ -1,0 +1,118 @@
+/* Swfdec
+ * Copyright (C) 2007 Benjamin Otte <otte@gnome.org>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ * Boston, MA  02110-1301  USA
+ */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <glib/gi18n.h>
+#include "swfdec-window.h"
+
+struct _SwfdecWindow {
+  gboolean		error;		/* TRUE if we're in error */
+  GtkBuilder *		builder;	/* builder instance to load from */
+  GtkWidget *		window;		/* the toplevel window */
+  SwfdecPlayer *	player;		/* the player we show or NULL if not initialized yet */
+  SwfdecLoader *	loader;		/* the loader we use to load the content or NULL if not initialized yet */
+};
+
+#define SWFDEC_IS_WINDOW(window) ((window) != NULL)
+
+/**
+ * swfdec_window_set_url:
+ * @window: the window that should show the given URL
+ * @url: URL to show. Must be a valid file:// or http:// URL in UTF-8.
+ *
+ * Sets the URL of @window to be  @url, if no URL was set on @indow before.
+ *
+ * Returns: %TRUE if the URL could be set, %FALSE if the window already shows a 
+ *          movie.
+ **/
+gboolean
+swfdec_window_set_url (SwfdecWindow *window, const char *url)
+{
+  g_return_val_if_fail (SWFDEC_IS_WINDOW (window), FALSE);
+  g_return_val_if_fail (url != NULL, FALSE);
+
+  if (window->player || window->error)
+    return FALSE;
+
+  window->loader = swfdec_gtk_loader_new (url);
+  window->player = swfdec_player_new (NULL);
+  swfdec_player_set_loader (window->player, window->loader);
+
+  return TRUE;
+}
+
+/**
+ * swfdec_window_error:
+ * @window: a window
+ * @msg: an error message to display for the user
+ *
+ * Shows the given error message to the user and aborts playback.
+ * This function may be called at any time, no matter the state of the window 
+ * object.
+ **/
+void
+swfdec_window_error (SwfdecWindow *window, const char *msg)
+{
+  /* NB: This function can be called during the construction process (like when
+   * the UI file isn't found, so a window object may not even exist. */
+
+  /* FIXME: disable playback related menu items */
+  /* FIXME: output this in a saner way */
+  g_printerr ("%s\n", msg);
+  window->error = TRUE;
+}
+
+#define BUILDER_FILE DATADIR G_DIR_SEPARATOR_S "swfdec-gnome" G_DIR_SEPARATOR_S "swfdec-player.ui"
+/**
+ * swfdec_window_new:
+ * @uri: a valid UTF-8 encoded URI.
+ *
+ * Opens a new window. If a URI was specified, it will be shown. Otherwise the
+ * window will appear empty.
+ *
+ * Returns: The window that was just openend. You don't own a reference to it.
+ **/
+SwfdecWindow *
+swfdec_window_new (const char *url)
+{
+  GError *error = NULL;
+  SwfdecWindow *window;
+
+  window = g_slice_new0 (SwfdecWindow);
+  window->builder = gtk_builder_new ();
+  gtk_builder_set_translation_domain (window->builder, GETTEXT_PACKAGE);
+  if (!gtk_builder_add_from_file (window->builder, BUILDER_FILE, &error)) {
+    swfdec_window_error (window, error->message);
+    return window;
+  }
+  gtk_builder_connect_signals (window->builder, window);
+  window->window = GTK_WIDGET (gtk_builder_get_object (window->builder, "player-window"));
+  if (window->window == NULL) {
+    swfdec_window_error (window, _("Internal error in the user interface defintion"));
+    return window;
+  }
+  if (url != NULL) {
+    swfdec_window_set_url (window, url);
+  }
+
+  return window;
+}
