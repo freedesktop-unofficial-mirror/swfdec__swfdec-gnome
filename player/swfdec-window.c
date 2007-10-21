@@ -129,6 +129,7 @@ swfdec_window_new (const char *url)
     swfdec_window_error (window, _("Internal error in the user interface defintion"));
     return window;
   }
+  g_object_weak_ref (G_OBJECT (window->window), (GWeakNotify) g_object_unref, window);
   if (url != NULL) {
     swfdec_window_set_url (window, url);
   }
