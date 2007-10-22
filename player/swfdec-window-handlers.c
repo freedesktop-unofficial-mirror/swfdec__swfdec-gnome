@@ -67,10 +67,14 @@ menu_file_open (GtkAction *action, SwfdecWindow *window)
 void
 menu_file_play (GtkToggleAction *action, SwfdecWindow *window)
 {
+  GObject *o;
+
   window->settings.playing = gtk_toggle_action_get_active (action);
   if (window->player) {
     swfdec_gtk_player_set_playing (SWFDEC_GTK_PLAYER (window->player), 
 	window->settings.playing);
+    o = gtk_builder_get_object (window->builder, "player-widget");
+    swfdec_gtk_widget_set_interactive (SWFDEC_GTK_WIDGET (o), window->settings.playing);
   }
 }
 
