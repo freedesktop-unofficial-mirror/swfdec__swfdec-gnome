@@ -64,6 +64,21 @@ is_image_interesting (cairo_surface_t *surface)
   return (variance > BORING_IMAGE_VARIANCE);
 }
 
+static gboolean
+advance (SwfdecPlayer *player, GTimer *timer, gulong advance_msecs)
+{
+  static const gulong max_runtime = 15 * 1000; /* 15 seconds per file */
+  gulong elapsed;
+
+  elapsed = (gulong) (g_timer_elapsed (timer, NULL) * 1000);
+  if (elapsed >= max_runtime)
+    return FALSE;
+    
+  swfdec_player_set_maximum_runtime (player, max_runtime - elapsed);
+  swfdec_player_advance (player, advance_msecs);
+  return TRUE;
+}
+
 int
 main (int argc, char **argv)
 {
@@ -73,11 +88,13 @@ main (int argc, char **argv)
   SwfdecLoader *loader;
   int width, height;
   double scale, scaled_size, x, y, w, h;
-  guint try, i, msecs, total;
+  guint try;
   cairo_surface_t *surface;
   cairo_t *cr;
   int size = 128;
   char **filenames = NULL;
+  GTimer *timer = NULL;
+  gboolean time_left;
   const GOptionEntry entries[] = {
     {
       "size", 's', 0, G_OPTION_ARG_INT, &size,
@@ -93,11 +110,12 @@ main (int argc, char **argv)
   };
 
   // init
-  context = g_option_context_new ("Create a thumbnail for Flash file");
-  g_option_context_add_main_entries (context, entries, NULL);
-  g_type_init ();
+  swfdec_init ();
 
   // read command line params
+  context = g_option_context_new ("Create a thumbnail for Flash file");
+  g_option_context_add_main_entries (context, entries, NULL);
+
   if (g_option_context_parse (context, &argc, &argv, &err) == FALSE) {
     g_printerr ("Couldn't parse command-line options: %s\n", err->message);
     g_error_free (err);
@@ -109,9 +127,6 @@ main (int argc, char **argv)
     return 1;
   }
 
-  // init swfdec
-  swfdec_init ();
-
   loader = swfdec_file_loader_new (filenames[0]);
   if (loader->error) {
     g_printerr ("Error loading %s: %s\n", filenames[0], loader->error);
@@ -119,18 +134,14 @@ main (int argc, char **argv)
     return 1;
   }
 
+  timer = g_timer_new ();
   player = swfdec_player_new (NULL);
-  swfdec_player_set_maximum_runtime (player, 5 * 1000);
   swfdec_player_set_loader (player, loader);
+  g_timer_start (timer);
 
-  // skip the start
-  for (i = 0, total = 0; i < 1000 && total < 10000; i++) {
-    msecs = swfdec_player_get_next_event (player);
-    if (msecs == -1)
-      break;
-    swfdec_player_advance (player, msecs);
-    total += msecs;
-  }
+  /* Skip the first 10 seconds */
+  /* Cheat: We do this in one call so that the max runtime kicks in */
+  time_left = advance (player, timer, 10 * 1000);
 
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, size, size);
   cr = cairo_create (surface);
@@ -166,21 +177,16 @@ main (int argc, char **argv)
   h = MIN (height, scaled_size);
 
   // render the image
-  try = 1;
-  do {
-    for (i = 0, total = 0; i < 100 && total < 1000; i++) {
-      msecs = swfdec_player_get_next_event (player);
-      if (msecs == -1)
-	break;
-      swfdec_player_advance (player, msecs);
-      total += msecs;
-    }
+  swfdec_player_render (player, cr, x, y, w, h);
 
+  for (try = 0; try < 10 && time_left && !is_image_interesting (surface); try++) {
+    time_left = advance (player, timer, 1000);
     swfdec_player_render (player, cr, x, y, w, h);
-  } while (msecs != -1 && !is_image_interesting (surface) && try++ < 10);
+  }
 
   cairo_destroy (cr);
   g_object_unref (player);
+  g_timer_destroy (timer);
 
   cairo_surface_write_to_png (surface, filenames[1]);
   cairo_surface_destroy (surface);
