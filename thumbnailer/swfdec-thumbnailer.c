@@ -1,6 +1,7 @@
 /* Swfdec Thumbnailer
  * Copyright (C) 2003, 2004 Bastien Nocera <hadess@hadess.net>
- *                     2007 Pekka Lampila <pekka.lampila@iki.fi>
+ *               2007 Pekka Lampila <pekka.lampila@iki.fi>
+ *               2007 Benjamin Otte <otte@gnome.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
