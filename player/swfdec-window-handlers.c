@@ -55,7 +55,7 @@ menu_file_open (GtkAction *action, SwfdecWindow *window)
       GTK_WINDOW (window->window), 
       GTK_FILE_CHOOSER_ACTION_OPEN, 
       GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-      GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
+      GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
   gtk_dialog_set_default_response (GTK_DIALOG (chooser), GTK_RESPONSE_ACCEPT);
 
   g_object_ref (window);
