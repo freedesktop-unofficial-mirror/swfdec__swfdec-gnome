@@ -15,3 +15,7 @@ swfdec_player_LDFLAGS = $(PLAYER_LIBS)
 
 pkgdata_DATA = \
 	swfdec-player.ui
+
+EXTRA_DIST = \
+	$(pkgdata_DATA)
+
