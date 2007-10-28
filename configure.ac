@@ -1,12 +1,29 @@
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
+
 AC_PREREQ([2.58])
-AC_INIT(swfdec-gnome, 0.5.3.1)
+AC_INIT( swfdec-gnome, [0.5.3.1], [https://bugs.freedesktop.org/enter_bug.cgi?product=swfdec] )
 
 AM_INIT_AUTOMAKE(1.6)
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_SRCDIR([config.h.in])
+AC_CONFIG_HEADER([config.h])
 AM_MAINTAINER_MODE
 
+# Checks for programs.
 AC_PROG_CC
+AC_PROG_INSTALL
+AC_PROG_MAKE_SET
 IT_PROG_INTLTOOL([0.35.0])
+
+# Checks for header files.
+AC_HEADER_STDC
+AC_CHECK_HEADERS([stdlib.h string.h])
+
+# Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+
+# Checks for library functions.
+AC_CHECK_FUNCS([strstr])
 
 GNOME_COMMON_INIT
 dnl GNOME_DOC_INIT
@@ -17,14 +34,11 @@ GNOME_DEBUG_CHECK
 
 dnl GTK_DOC_CHECK(1.0)
 
-
 dnl Setup gettext
-
 GETTEXT_PACKAGE=swfdec-gnome
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE],["$GETTEXT_PACKAGE"],[Gettext package])
 AM_GLIB_GNU_GETTEXT
-
 
 dnl Required versions
 
@@ -33,7 +47,6 @@ AC_SUBST(SWFDEC_MAJORMINOR)
 SWFDEC_REQUIRED=0.5.3.1
 
 GTK_REQUIRED=2.12.0
-
 
 dnl Check dependencies
 
@@ -51,6 +64,9 @@ dnl Finish up
 
 AC_SUBST(GLOBAL_CFLAGS)
 
-AC_CONFIG_FILES(Makefile player/Makefile thumbnailer/Makefile po/Makefile.in)
-
+AC_CONFIG_FILES([Makefile
+                 data/Makefile
+                 player/Makefile
+                 po/Makefile.in
+                 thumbnailer/Makefile])
 AC_OUTPUT

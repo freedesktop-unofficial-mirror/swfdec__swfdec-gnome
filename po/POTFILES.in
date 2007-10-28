@@ -1,10 +1,11 @@
 # List of source files containing translatable strings.
 # Please keep this file sorted alphabetically.
 [encoding: UTF-8]
+data/swfdec-player.desktop.in
+data/swfdec.xml.in
 player/swfdec-player.c
 player/swfdec-player.ui
 player/swfdec-window-handlers.c
 player/swfdec-window.c
-swfdec-player.desktop.in
 thumbnailer/swfdec-thumbnailer.schemas.in
 
