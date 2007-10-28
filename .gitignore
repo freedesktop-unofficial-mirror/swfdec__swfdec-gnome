@@ -23,7 +23,8 @@ Makefile.in
 missing
 mkinstalldirs
 stamp-h1
-swfdec-player.desktop
+data/swfdec-player.desktop
+data/swfdec.xml
 player/.deps
 player/Makefile
 player/Makefile.in
@@ -34,9 +35,11 @@ po/Makefile.in.in
 po/POTFILES
 po/stamp-it
 po/stamp-it.tmp
+po/*.gmo
 thumbnailer/.deps
 thumbnailer/Makefile
 thumbnailer/Makefile.in
 thumbnailer/*.o
 thumbnailer/swfdec-thumbnailer
 thumbnailer/swfdec-thumbnailer.schemas
+
