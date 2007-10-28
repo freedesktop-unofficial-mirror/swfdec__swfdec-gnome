@@ -3,19 +3,19 @@
 <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
 
    <mime-type type="application/x-shockwave-flash">
-     <comment>Adobe/Macromedia Flash animation</comment>
+     <_comment>Adobe/Macromedia Flash animation</_comment>
      <glob pattern="*.swf"/>
    </mime-type>
 
    <mime-type type="video/x-flv">
-     <comment>Adobe/Macromedia Flash video</comment>
+     <_comment>Adobe/Macromedia Flash video</_comment>
      <glob pattern="*.flv"/>
      <alias type="video/flv"/>
      <alias type="flv-application/octet-stream"/>
    </mime-type>
 
    <mime-type type="application/futuresplash">
-     <comment>???</comment>
+     <_comment>???</_comment>
      <glob pattern="*.spl"/>
    </mime-type>
 
