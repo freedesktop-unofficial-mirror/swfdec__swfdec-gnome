@@ -120,6 +120,7 @@ main (int argc, char **argv)
   }
 
   player = swfdec_player_new (NULL);
+  swfdec_player_set_maximum_runtime (player, 5 * 1000);
   swfdec_player_set_loader (player, loader);
 
   // skip the start
