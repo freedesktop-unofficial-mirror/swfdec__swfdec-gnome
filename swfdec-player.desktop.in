@@ -2,7 +2,7 @@
 _Name=Swfdec Flash Player
 _Comment=Play Adobe Flash files
 Exec=swfdec-player %U
-Icon=swfdec-player
+Icon=swfdec
 Terminal=false
 Type=Application
 StartupNotify=true
