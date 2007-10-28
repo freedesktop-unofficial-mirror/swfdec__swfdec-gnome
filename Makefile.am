@@ -16,3 +16,11 @@ desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 mimedir = $(datadir)/mime/packages
 mime_DATA = swfdec.xml
 
+CLEANFILES = 			\
+	swfdec-player.desktop
+
+DISTCLEANFILES =		\
+	intltool-extract	\
+	intltool-merge		\
+	intltool-update
+
