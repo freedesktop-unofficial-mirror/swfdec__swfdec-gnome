@@ -24,7 +24,6 @@ missing
 mkinstalldirs
 stamp-h1
 data/swfdec-player.desktop
-data/swfdec.xml
 player/.deps
 player/Makefile
 player/Makefile.in
