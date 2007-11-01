@@ -162,7 +162,7 @@ swfdec_window_new (const char *url)
   gtk_builder_connect_signals (window->builder, window);
   window->window = GTK_WIDGET (gtk_builder_get_object (window->builder, "player-window"));
   if (window->window == NULL) {
-    swfdec_window_error (window, _("Internal error in the user interface defintion"));
+    swfdec_window_error (window, _("Internal error in the user interface definition"));
     return window;
   }
   g_object_weak_ref (G_OBJECT (window->window), (GWeakNotify) g_object_unref, window);
