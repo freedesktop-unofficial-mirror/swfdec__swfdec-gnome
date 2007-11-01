@@ -3,7 +3,6 @@
 [encoding: UTF-8]
 data/swfdec-player.desktop.in
 player/swfdec-player.c
-player/swfdec-player.ui
 player/swfdec-window-handlers.c
 player/swfdec-window.c
 thumbnailer/swfdec-thumbnailer.schemas.in
