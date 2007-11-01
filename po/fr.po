@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.5.3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-01 14:10+0100\n"
+"POT-Creation-Date: 2007-11-01 14:47+0100\n"
 "PO-Revision-Date: 2007-10-28 16:24+0100\n"
 "Last-Translator: Stéphane Loeuillet <leroutier@gmail.com>\n"
 "Language-Team: Français <fr@li.org>\n"
@@ -34,7 +34,7 @@ msgstr "Mettre en pause la lecture après chargement du fichier"
 
 #: ../player/swfdec-window-handlers.c:54
 msgid "Select a file to play"
-msgstr "Choisir le fichier à lire"
+msgstr "Choisissez le fichier à lire"
 
 #: ../player/swfdec-window.c:165
 msgid "Internal error in the user interface definition"
@@ -64,3 +64,37 @@ msgstr ""
 "Commande et paramètres de lancement valides pour le créateur de miniatures "
 "pour fichiers Flash.Lisez la documentation Nautilus relative à la création "
 "de miniatures pour plus de détails."
+
+#~ msgid "Close"
+#~ msgstr "Quitter le lecteur Flash"
+
+#~ msgid "Mute"
+#~ msgstr "Sourdine"
+
+#~ msgid "Mute sound output"
+#~ msgstr "Coupe le son"
+
+#~ msgid "Open a file"
+#~ msgstr "Ouvrir un fichier"
+
+#~ msgid "Play / P_ause"
+#~ msgstr "Lecture / P_ause"
+
+#, fuzzy
+#~ msgid "Play or pause the file"
+#~ msgstr "Permet de lire des fichiers Adobe Flash"
+
+#~ msgid "_About"
+#~ msgstr "A _propos"
+
+#~ msgid "_Close"
+#~ msgstr "_Quitter"
+
+#~ msgid "_File"
+#~ msgstr "_Fichier"
+
+#~ msgid "_Help"
+#~ msgstr "Aid_e"
+
+#~ msgid "_Open..."
+#~ msgstr "_Ouvrir..."
