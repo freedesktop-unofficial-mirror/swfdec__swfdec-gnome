@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: 0.5.3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-28 16:27+0100\n"
+"POT-Creation-Date: 2007-11-01 14:10+0100\n"
 "PO-Revision-Date: 2007-10-28 16:24+0100\n"
 "Last-Translator: Stéphane Loeuillet <leroutier@gmail.com>\n"
 "Language-Team: Français <fr@li.org>\n"
@@ -18,56 +18,49 @@ msgstr ""
 
 #: ../data/swfdec-player.desktop.in.h:1
 msgid "Play Adobe Flash files"
-msgstr ""
+msgstr "Permet de lire des fichiers Adobe Flash"
 
 #: ../data/swfdec-player.desktop.in.h:2 ../player/swfdec-player.c:63
 msgid "Swfdec Flash Player"
-msgstr ""
-
-#: ../data/swfdec.xml.in.h:1
-msgid "???"
-msgstr ""
-
-#: ../data/swfdec.xml.in.h:2
-msgid "Adobe/Macromedia Flash animation"
-msgstr ""
-
-#: ../data/swfdec.xml.in.h:3
-msgid "Adobe/Macromedia Flash video"
-msgstr ""
+msgstr "Lecteur Flash Swfdec"
 
 #: ../player/swfdec-player.c:56
 msgid "don't play sound"
-msgstr ""
+msgstr "Ne pas jouer le son"
 
 #: ../player/swfdec-player.c:57
 msgid "start player paused"
-msgstr ""
+msgstr "Mettre en pause la lecture après chargement du fichier"
 
 #: ../player/swfdec-window-handlers.c:54
 msgid "Select a file to play"
-msgstr ""
+msgstr "Choisir le fichier à lire"
 
 #: ../player/swfdec-window.c:165
-msgid "Internal error in the user interface defintion"
-msgstr ""
+msgid "Internal error in the user interface definition"
+msgstr "Erreur interne dans la définition de l'interface utilisateur"
 
 #: ../thumbnailer/swfdec-thumbnailer.schemas.in.h:1
 msgid ""
 "Boolean options available, true enables thumbnailing and false disables the "
 "creation of new thumbnails"
 msgstr ""
+"De cette valeur dépend la création de miniatures pour les fichiers Flash, ou "
+"non"
 
 #: ../thumbnailer/swfdec-thumbnailer.schemas.in.h:2
 msgid "Enable thumbnailing of Flash files"
-msgstr ""
+msgstr "Activation de la création de miniatures pour les fichiers Flash"
 
 #: ../thumbnailer/swfdec-thumbnailer.schemas.in.h:3
 msgid "Thumbnail command for Flash files"
-msgstr ""
+msgstr "Commande de création de miniatures pour les fichiers Flash"
 
 #: ../thumbnailer/swfdec-thumbnailer.schemas.in.h:4
 msgid ""
 "Valid command plus arguments for the Flash file thumbnailer. See nautilus "
 "thumbnailer documentation for more information."
 msgstr ""
+"Commande et paramètres de lancement valides pour le créateur de miniatures "
+"pour fichiers Flash.Lisez la documentation Nautilus relative à la création "
+"de miniatures pour plus de détails."
