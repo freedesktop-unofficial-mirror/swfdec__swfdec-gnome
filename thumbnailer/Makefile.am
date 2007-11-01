@@ -1,5 +1,3 @@
-@INTLTOOL_SCHEMAS_RULE@
-
 bin_PROGRAMS = swfdec-thumbnailer
 
 swfdec_thumbnailer_SOURCES = swfdec-thumbnailer.c
@@ -7,13 +5,10 @@ swfdec_thumbnailer_SOURCES = swfdec-thumbnailer.c
 INCLUDES = $(GLOBAL_CFLAGS) $(THUMBNAILER_CFLAGS)
 swfdec_thumbnailer_LDFLAGS = $(THUMBNAILER_LIBS)
 
-schema_files = \
-	swfdec-thumbnailer.schemas.in
-
-schema_DATA = \
-	swfdec-thumbnailer.schemas
-
-schemadir = $(GCONF_SCHEMA_FILE_DIR)
+schemas_in_files = swfdec-thumbnailer.schemas.in
+schemasdir = $(GCONF_SCHEMA_FILE_DIR)
+schemas_DATA = $(schemas_in_files:.schemas.in=.schemas)
+@INTLTOOL_SCHEMAS_RULE@
 
 install-data-local:
 if GCONF_SCHEMAS_INSTALL
@@ -25,7 +20,8 @@ if GCONF_SCHEMAS_INSTALL
 endif
 
 EXTRA_DIST = \
-	$(schema_files)
+	$(schemas_in_files)
 
-DISTCLEANFILES = \
-	$(schema_DATA)
+CLEANFILES = \
+	$(schemas_DATA)
+
