@@ -80,9 +80,8 @@ msgstr ""
 #~ msgid "Play / P_ause"
 #~ msgstr "Lecture / P_ause"
 
-#, fuzzy
 #~ msgid "Play or pause the file"
-#~ msgstr "Permet de lire des fichiers Adobe Flash"
+#~ msgstr "Lecture ou pause sur le fichier"
 
 #~ msgid "_About"
 #~ msgstr "A _propos"
