@@ -8,40 +8,40 @@
       <object class="GtkActionGroup" id="main-action-group">
          <child>
             <object class="GtkAction" id="file-menu">
-               <property name="label">_File</property>
+               <property name="label" translatable="yes">_File</property>
             </object>
          </child>
          <child>
             <object class="GtkAction" id="open">
-               <property name="label">_Open...</property>
+               <property name="label" translatable="yes">_Open...</property>
                <property name="stock-id">gtk-open</property>
-               <property name="tooltip">Open a file</property>
+               <property name="tooltip" translatable="yes">Open a file</property>
                <signal name="activate" handler="menu_file_open"/>
             </object>
             <accelerator key="O" modifiers="GDK_CONTROL_MASK"/>
          </child>
          <child>
             <object class="GtkToggleAction" id="play">
-               <property name="label">Play / P_ause</property>
+               <property name="label" translatable="yes">Play / P_ause</property>
                <property name="stock-id">gtk-media-play</property>
-               <property name="tooltip">Play or pause the file</property>
+               <property name="tooltip" translatable="yes">Play or pause the file</property>
                <signal name="toggled" handler="menu_file_play"/>
             </object>
             <accelerator key="space" modifiers="GDK_CONTROL_MASK"/>
          </child>
          <child>
             <object class="GtkToggleAction" id="mute">
-               <property name="label">Mute</property>
-               <property name="tooltip">Mute sound output</property>
+               <property name="label" translatable="yes">Mute</property>
+               <property name="tooltip" translatable="yes">Mute sound output</property>
                <signal name="toggled" handler="menu_file_mute"/>
             </object>
             <accelerator key="M" modifiers="GDK_CONTROL_MASK"/>
          </child>
          <child>
             <object class="GtkAction" id="quit">
-               <property name="label">_Close</property>
+               <property name="label" translatable="yes">_Close</property>
                <property name="stock-id">gtk-close</property>
-               <property name="tooltip">Close</property>
+               <property name="tooltip" translatable="yes">Close</property>
                <signal name="activate" handler="menu_file_close"/>
             </object>
             <accelerator key="W" modifiers="GDK_CONTROL_MASK"/>
@@ -49,12 +49,12 @@
 
          <child>
             <object class="GtkAction" id="help-menu">
-               <property name="label">_Help</property>
+               <property name="label" translatable="yes">_Help</property>
             </object>
          </child>
          <child>
             <object class="GtkAction" id="about">
-               <property name="label">_About</property>
+               <property name="label" translatable="yes">_About</property>
                <property name="stock-id">gtk-about</property>
                <signal name="activate" handler="menu_help_about"/>
             </object>
