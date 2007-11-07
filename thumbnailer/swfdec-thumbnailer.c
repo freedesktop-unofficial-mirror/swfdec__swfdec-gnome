@@ -86,7 +86,7 @@ main (int argc, char **argv)
   GError *err;
   SwfdecPlayer *player;
   SwfdecLoader *loader;
-  int width, height;
+  guint width, height;
   double scale, scaled_size, x, y, w, h;
   guint try;
   cairo_surface_t *surface;
@@ -147,7 +147,7 @@ main (int argc, char **argv)
   cr = cairo_create (surface);
 
   // get image size
-  swfdec_player_get_image_size (player, &width, &height);
+  swfdec_player_get_default_size (player, &width, &height);
   if (width == 0 || height == 0) {
     /* force a size if the player doesn't have a default one */
     swfdec_player_set_size (player, size, size);
