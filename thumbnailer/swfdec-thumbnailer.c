@@ -32,32 +32,46 @@
  * It does this by calculating the statistical variance of the
  * black-and-white image */
 static gboolean
-is_image_interesting (cairo_surface_t *surface)
+is_image_interesting (cairo_surface_t *surface, int x, int y, int width,
+    int height)
 {
   /* We're gonna assume 8-bit samples. If anyone uses anything different,
    * it doesn't really matter cause it's gonna be ugly anyways */
-  int rowstride = cairo_image_surface_get_stride (surface);
-  int height = cairo_image_surface_get_height (surface);
-  guchar* buffer = cairo_image_surface_get_data (surface);
-  int num_samples = (rowstride * height);
-  int i;
-  float x_bar = 0.0f;
-  float variance = 0.0f;
+  int stride, rowcount, num_samples, i, j;
+  guchar *buffer;
+  float x_bar, variance;
 
-  /* FIXME: If this proves to be a performance issue, this function
-   * can be modified to perhaps only check 3 rows. I doubt this'll
-   * be a problem though. */
+  g_return_val_if_fail (surface != NULL, FALSE);
+  g_return_val_if_fail (x + width <= cairo_image_surface_get_width (surface),
+      FALSE);
+  g_return_val_if_fail (y + height <= cairo_image_surface_get_height (surface),
+      FALSE);
+
+  stride = cairo_image_surface_get_stride (surface);
+  rowcount = cairo_image_surface_get_height (surface);
+  buffer = cairo_image_surface_get_data (surface);
+
+  x *= stride / cairo_image_surface_get_width (surface);
+  width *= stride / cairo_image_surface_get_width (surface);
+
+  num_samples = width * height;
 
   /* Iterate through the image to calculate x-bar */
-  for (i = 0; i < num_samples; i++) {
-    x_bar += (float) buffer[i];
+  x_bar = 0.0f;
+  for (i = y; i < y + height; i++) {
+    for (j = x; j < x + width; j++) {
+      x_bar += (float) buffer[i * stride + j];
+    }
   }
   x_bar /= ((float) num_samples);
 
   /* Calculate the variance */
-  for (i = 0; i < num_samples; i++) {
-    float tmp = ((float) buffer[i] - x_bar);
-    variance += tmp * tmp;
+  variance = 0.0f;
+  for (i = y; i < y + height; i++) {
+    for (j = x; j < x + width; j++) {
+      float tmp = ((float) buffer[i * stride + j] - x_bar);
+      variance += tmp * tmp;
+    }
   }
   variance /= ((float) (num_samples - 1));
 
@@ -179,7 +193,11 @@ main (int argc, char **argv)
   // render the image
   swfdec_player_render (player, cr, x, y, w, h);
 
-  for (try = 0; try < 10 && time_left && !is_image_interesting (surface); try++) {
+  for (try = 0; try < 10 && time_left; try++)
+  {
+    if (is_image_interesting (surface, (size - w * scale) / 2,
+	  (size - h * scale) / 2, w * scale, h * scale))
+	break;
     time_left = advance (player, timer, 1000);
     swfdec_player_render (player, cr, x, y, w, h);
   }
