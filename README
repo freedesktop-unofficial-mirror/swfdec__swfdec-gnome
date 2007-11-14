@@ -1,0 +1,23 @@
+
+Swfdec is a decoder/renderer for Macromedia Flash animations.  The
+decoding and rendering engine is provided in a library that can
+be used by other applications.
+
+This package contains programs to integrate Flash functionality into the GNOME
+desktop.  It's main application is swfdec-player, a stand-alone viewer for 
+Flash files.  It also contains swfdec-thumbnailer, a program that provides 
+screenshots for files to display in the Nautilus file manager
+
+
+Maintainers:
+
+   see the file MAINTAINERS
+
+
+Dependencies:
+
+  swfdec (= 0.5.4)
+  swfdec-gtk (= 0.5.4)
+  gtk (>= 2.12.0)
+  GConf2
+
