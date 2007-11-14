@@ -1,6 +1,7 @@
 SUBDIRS = player thumbnailer po data
 
 EXTRA_DIST =			\
+	MAINTAINERS		\
 	autogen.sh		\
 	intltool-extract.in	\
 	intltool-merge.in	\
