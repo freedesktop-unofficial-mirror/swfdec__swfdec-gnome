@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.58])
-AC_INIT( swfdec-gnome, [0.5.3.1], [https://bugs.freedesktop.org/enter_bug.cgi?product=swfdec] )
+AC_INIT( swfdec-gnome, [0.5.4.1], [https://bugs.freedesktop.org/enter_bug.cgi?product=swfdec] )
 
 AM_INIT_AUTOMAKE(1.6)
 AC_CONFIG_SRCDIR([config.h.in])
@@ -44,7 +44,7 @@ dnl Required versions
 
 SWFDEC_MAJORMINOR=0.5
 AC_SUBST(SWFDEC_MAJORMINOR)
-SWFDEC_REQUIRED=0.5.3.1
+SWFDEC_REQUIRED=0.5.4.1
 
 GTK_REQUIRED=2.12.0
 
