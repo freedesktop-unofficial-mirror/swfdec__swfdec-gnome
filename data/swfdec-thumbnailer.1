@@ -1,0 +1,39 @@
+.TH SWFDEC-THUMBNAILER 1 "01 Nov 2007"
+.SH NAME
+swfdec-thumbnailer \- Create a thumbnail for a Flash file
+.PP
+.SH SYNOPSIS
+.B swfdec-thumbnailer
+[ OPTION ...] <
+.I INPUT
+> <
+.I OUTPUT
+>
+
+.SH DESCRIPTION
+swfdec-thumbnailer is a program that provides screenshots (thumbnails)
+for Flash files. These thumbnails can then be used by other programs like
+the Nautilus file manager.
+
+.SH ARGUMENTS
+.PP
+.B INPUT
+The input filename. This should be a Flash file.
+.PP
+.B OUTPUT
+The output filename for the thumbnail. The output file will be in PNG format.
+
+
+.SH OPTIONS
+.PP
+.B -?\fR, \fB--help
+Show help options
+.PP
+.B -s\fR, \fB--size
+Set the size of the thumbnail in pixels (default 128)
+
+.SH SEE ALSO
+.B nautilus\fR(1), \fBswfdec-player\fR(1), \fBhttp://swfdec.freedesktop.org
+
+.SH AUTHOR
+This manual page was written by Santiago Garcia Mantinan <manty@debian.org>.
