@@ -90,7 +90,7 @@ swfdec_window_player_next_event (SwfdecPlayer *player, GParamSpec *pspec, Swfdec
 
   g_object_get (window->loader, "error", &error, "eof", &eof, NULL);
   if (error) {
-    swfdec_window_error (window, _("Error loading <i>%s</>."), 
+    swfdec_window_error (window, _("Error loading <i>%s</i>."), 
 	swfdec_loader_get_filename (window->loader));
   } else if (!swfdec_player_is_initialized (player) && 
       swfdec_player_get_next_event (player) < 0 &&
