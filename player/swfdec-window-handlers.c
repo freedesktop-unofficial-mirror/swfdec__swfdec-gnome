@@ -112,6 +112,15 @@ menu_help_about (GtkAction *action, SwfdecWindow *window)
       "authors", authors,
       "artists", artists,
       "comments", "Play Adobe Flash files",
+      /* Translators: This is a special message that shouldn't be translated
+       * literally. It is used in the about box to give credits to
+       * the translators.
+       * Thus, you should translate it to your name and email address.
+       * You should also include other translators who have contributed to
+       * this translation; in that case, please write each of them on a separate
+       * line seperated by newlines (\n).
+       */
+      "translator-credits", _("translator-credits"),
       "version", VERSION,
       "website", "http://swfdec.freedesktop.org/",
       NULL);
