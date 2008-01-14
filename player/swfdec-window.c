@@ -181,6 +181,7 @@ swfdec_window_new (const char *url)
   if (url != NULL) {
     swfdec_window_set_url (window, url);
   }
+  swfdec_window_set_settings (window, &window->settings);
 
   return window;
 }
