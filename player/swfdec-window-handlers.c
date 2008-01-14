@@ -35,7 +35,6 @@ menu_file_open_response (GtkFileChooser *chooser, gint response, SwfdecWindow *w
 
       if (!swfdec_window_set_url (window, url)) {
 	SwfdecWindow *new = swfdec_window_new (url);
-	swfdec_window_set_settings (new, &window->settings);
       }
       g_free (url);
       g_free (target);
