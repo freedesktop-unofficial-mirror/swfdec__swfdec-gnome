@@ -124,6 +124,48 @@
       </child>
 
       <child>
+	<object class="GtkHBox" id="player-error-area">
+	  <property name="homogeneous">False</property>
+	  <property name="spacing">0</property>
+	  <property name="visible">False</property>
+	  <child>
+	    <object class="GtkImage" id="player-error-image" >
+	      <property name="icon-size">6</property>
+	      <property name="stock">gtk-dialog-error</property>
+	      <property name="visible">True</property>
+	    </object>
+	    <packing>
+	      <property name="pack-type">start</property>
+	      <property name="expand">False</property>
+	      <property name="fill">True</property>
+	      <property name="padding">0</property>
+	    </packing>
+	  </child>
+	  <child>
+	    <object class="GtkLabel" id="player-error-label" >
+	      <property name="selectable">True</property>
+	      <property name="use-markup">True</property>
+	      <property name="visible">True</property>
+	      <property name="wrap">True</property>
+	      <property name="label">&lt;b&gt;This is a very long text that will wrap around, because it definitely is long enough.&lt;/b&gt;</property>
+	    </object>
+	    <packing>
+	      <property name="pack-type">start</property>
+	      <property name="expand">True</property>
+	      <property name="fill">True</property>
+	      <property name="padding">0</property>
+	    </packing>
+	  </child>
+	</object>
+	<packing>
+	  <property name="pack-type">start</property>
+	  <property name="expand">False</property>
+	  <property name="fill">True</property>
+	  <property name="padding">0</property>
+	</packing>
+      </child>
+
+      <child>
 	<object class="SwfdecGtkWidget" id="player-widget">
 	  <property name="visible">True</property>
 	  <property name="can_focus">True</property>
