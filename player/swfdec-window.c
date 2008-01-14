@@ -75,12 +75,22 @@ swfdec_window_init (SwfdecWindow *window)
   windows = g_slist_prepend (windows, window);
 }
 
+static void
+swfdec_window_player_initialized (SwfdecPlayer *player, GParamSpec *pspec, SwfdecWindow *window)
+{
+  if (!swfdec_player_is_initialized (player))
+    return;
+
+  gtk_recent_manager_add_item (gtk_recent_manager_get_default (),
+      swfdec_url_get_url (swfdec_loader_get_url (window->loader)));
+}
+
 /**
  * swfdec_window_set_url:
  * @window: the window that should show the given URL
  * @url: URL to show. Must be a valid file:// or http:// URL in UTF-8.
  *
- * Sets the URL of @window to be  @url, if no URL was set on @indow before.
+ * Sets the URL of @window to be  @url, if no URL was set on @window before.
  *
  * Returns: %TRUE if the URL could be set, %FALSE if the window already shows a 
  *          movie.
@@ -100,6 +110,8 @@ swfdec_window_set_url (SwfdecWindow *window, const char *url)
 
   window->loader = swfdec_gtk_loader_new (url);
   window->player = swfdec_gtk_player_new (NULL);
+  g_signal_connect (window->player, "notify::initialized", 
+      G_CALLBACK (swfdec_window_player_initialized), window);
   swfdec_player_set_loader (window->player, window->loader);
   swfdec_gtk_player_set_audio_enabled (SWFDEC_GTK_PLAYER (window->player), 
       window->settings.sound);
