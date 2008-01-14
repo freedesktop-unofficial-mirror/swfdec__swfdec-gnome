@@ -55,21 +55,21 @@ main (int argc, char *argv[])
   GOptionEntry options[] = {
     { "no-sound", 'n', G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &settings.sound, N_("don't play sound"), NULL },
     { "paused", 'p', G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &settings.playing, N_("start player paused"), NULL },
-    { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_STRING_ARRAY, &filenames, NULL, "<FILE> [<FILE> ...]" },
+    { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_STRING_ARRAY, &filenames, NULL, N_("[FILE ...]") },
     { NULL }
   };
   GOptionContext *ctx;
 
   g_set_application_name (_("Swfdec Flash Player"));
-  ctx = g_option_context_new ("");
+  ctx = g_option_context_new (NULL);
   g_option_context_set_translation_domain (ctx, GETTEXT_PACKAGE);
-  g_option_context_add_main_entries (ctx, options, "options");
+  g_option_context_add_main_entries (ctx, options, GETTEXT_PACKAGE);
   g_option_context_add_group (ctx, gtk_get_option_group (TRUE));
   g_option_context_parse (ctx, &argc, &argv, &error);
   g_option_context_free (ctx);
 
   if (error) {
-    g_printerr ("Error parsing command line arguments: %s\n", error->message);
+    g_printerr (_("Error parsing command line arguments: %s\n"), error->message);
     g_error_free (error);
     return EXIT_FAILURE;
   }
