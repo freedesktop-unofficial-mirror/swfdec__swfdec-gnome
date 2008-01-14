@@ -21,6 +21,13 @@
             <accelerator key="O" modifiers="GDK_CONTROL_MASK"/>
          </child>
          <child>
+            <object class="GtkRecentAction" id="recent">
+               <property name="label" translatable="yes">Open _Recent</property>
+               <property name="tooltip" translatable="yes">Select a recently opened file</property>
+               <signal name="item-activated" handler="menu_file_recent"/>
+            </object>
+         </child>
+         <child>
             <object class="GtkToggleAction" id="play">
                <property name="label" translatable="yes">Play / P_ause</property>
                <property name="stock-id">gtk-media-play</property>
@@ -66,11 +73,12 @@
       <menubar name="player-menubar">
          <menu name="file" action="file-menu">
             <menuitem name="open" action="open"/>
-            <placeholder name="recent-placeholder"/>
+            <menuitem name="recent" action="recent"/>
             <separator/>
             <menuitem name="play" action="play"/>
             <menuitem name="mute" action="mute"/>
             <separator/>
+            <placeholder name="recent-placeholder"/>
             <menuitem name="quit" action="quit"/>
          </menu>
          <menu name="help" action="help-menu">

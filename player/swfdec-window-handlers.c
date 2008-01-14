@@ -94,6 +94,15 @@ menu_file_close (GtkAction *action, SwfdecWindow *window)
 }
 
 void
+menu_file_recent (GtkAction *action, SwfdecWindow *window)
+{
+  const char *url = gtk_recent_chooser_get_current_uri (GTK_RECENT_CHOOSER (action));
+
+  if (!swfdec_window_set_url (window, url))
+    swfdec_window_new (url);
+}
+
+void
 menu_help_about (GtkAction *action, SwfdecWindow *window)
 {
   static const char *authors[] = {
