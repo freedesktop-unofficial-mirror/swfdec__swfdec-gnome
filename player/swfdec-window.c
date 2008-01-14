@@ -78,11 +78,17 @@ swfdec_window_init (SwfdecWindow *window)
 static void
 swfdec_window_player_initialized (SwfdecPlayer *player, GParamSpec *pspec, SwfdecWindow *window)
 {
-  if (!swfdec_player_is_initialized (player))
-    return;
+  static const char *mime[2] = { "swfdec-player", NULL };
+  GtkRecentData data = { NULL, NULL, (char *) "application/x-shockwave-flash",
+    (char *) g_get_application_name (), g_strjoin (" ", g_get_prgname (), "%u", NULL), 
+    (char **) mime, FALSE };
 
-  gtk_recent_manager_add_item (gtk_recent_manager_get_default (),
-      swfdec_url_get_url (swfdec_loader_get_url (window->loader)));
+  if (swfdec_player_is_initialized (player)) {
+    gtk_recent_manager_add_full (gtk_recent_manager_get_default (),
+	swfdec_url_get_url (swfdec_loader_get_url (window->loader)),
+	&data);
+  }
+  g_free (data.app_exec);
 }
 
 /**
@@ -148,6 +154,16 @@ swfdec_window_error (SwfdecWindow *window, const char *msg)
   window->error = TRUE;
 }
 
+static void
+swfdec_window_add_recent_filter (GtkRecentChooser *chooser)
+{
+  GtkRecentFilter *filter;
+
+  filter = gtk_recent_filter_new ();
+  gtk_recent_filter_add_group (filter, "swfdec-player");
+  gtk_recent_chooser_set_filter (chooser, filter);
+}
+
 #define BUILDER_FILE DATADIR G_DIR_SEPARATOR_S "swfdec-gnome" G_DIR_SEPARATOR_S "swfdec-player.ui"
 /**
  * swfdec_window_new:
@@ -172,6 +188,8 @@ swfdec_window_new (const char *url)
     return window;
   }
   gtk_builder_connect_signals (window->builder, window);
+  swfdec_window_add_recent_filter (GTK_RECENT_CHOOSER (
+	gtk_builder_get_object (window->builder, "recent")));
   window->window = GTK_WIDGET (gtk_builder_get_object (window->builder, "player-window"));
   if (window->window == NULL) {
     swfdec_window_error (window, _("Broken user interface definition file"));
