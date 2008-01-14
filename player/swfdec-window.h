@@ -64,7 +64,8 @@ SwfdecWindow *	swfdec_window_new		(const char *			url);
 gboolean	swfdec_window_set_url		(SwfdecWindow *			window,
 						 const char *			url);
 void		swfdec_window_error		(SwfdecWindow *			window,
-						 const char *			msg);
+						 const char *			format,
+						 ...);
 void		swfdec_window_set_settings	(SwfdecWindow *			window,
 						 const SwfdecWindowSettings *	settings);
 

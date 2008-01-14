@@ -22,6 +22,7 @@
 #endif
 
 #include <glib/gi18n.h>
+#include <glib/gprintf.h>
 #include "swfdec-window.h"
 
 G_DEFINE_TYPE (SwfdecWindow, swfdec_window, G_TYPE_OBJECT)
@@ -76,6 +77,21 @@ swfdec_window_init (SwfdecWindow *window)
 }
 
 static void
+swfdec_window_player_aborted (SwfdecPlayer *player, GParamSpec *pspec, SwfdecWindow *window)
+{
+  if (swfdec_as_context_is_aborted (SWFDEC_AS_CONTEXT (player)))
+    swfdec_window_error (window, _("Broken Flash file, playback aborted."));
+}
+
+static void
+swfdec_window_player_next_event (SwfdecPlayer *player, GParamSpec *pspec, SwfdecWindow *window)
+{
+  if (!swfdec_player_is_initialized (player) && swfdec_player_get_next_event (player) < 0)
+    swfdec_window_error (window, _("%s is not a Flash file."), 
+	swfdec_loader_get_filename (window->loader));
+}
+
+static void
 swfdec_window_player_initialized (SwfdecPlayer *player, GParamSpec *pspec, SwfdecWindow *window)
 {
   static const char *mime[2] = { "swfdec-player", NULL };
@@ -87,6 +103,7 @@ swfdec_window_player_initialized (SwfdecPlayer *player, GParamSpec *pspec, Swfde
     gtk_recent_manager_add_full (gtk_recent_manager_get_default (),
 	swfdec_url_get_url (swfdec_loader_get_url (window->loader)),
 	&data);
+    g_signal_handlers_disconnect_by_func (player, swfdec_window_player_next_event, window);
   }
   g_free (data.app_exec);
 }
@@ -116,8 +133,12 @@ swfdec_window_set_url (SwfdecWindow *window, const char *url)
 
   window->loader = swfdec_gtk_loader_new (url);
   window->player = swfdec_gtk_player_new (NULL);
+  g_signal_connect (window->player, "notify::aborted", 
+      G_CALLBACK (swfdec_window_player_aborted), window);
   g_signal_connect (window->player, "notify::initialized", 
       G_CALLBACK (swfdec_window_player_initialized), window);
+  g_signal_connect (window->player, "notify::next-event", 
+      G_CALLBACK (swfdec_window_player_next_event), window);
   swfdec_player_set_loader (window->player, window->loader);
   swfdec_gtk_player_set_audio_enabled (SWFDEC_GTK_PLAYER (window->player), 
       window->settings.sound);
@@ -136,22 +157,46 @@ swfdec_window_set_url (SwfdecWindow *window, const char *url)
 /**
  * swfdec_window_error:
  * @window: a window
- * @msg: an error message to display for the user
+ * @format: an error message to display for the user in printf-style format
+ * @...: arguments for the function
  *
  * Shows the given error message to the user and aborts playback.
  * This function may be called at any time, no matter the state of the window 
  * object.
  **/
 void
-swfdec_window_error (SwfdecWindow *window, const char *msg)
+swfdec_window_error (SwfdecWindow *window, const char *format, ...)
 {
+  char *markup, *msg;
+  va_list varargs;
+
+  g_return_if_fail (SWFDEC_IS_WINDOW (window));
+  g_return_if_fail (msg != NULL);
+
   /* NB: This function can be called during the construction process (like when
    * the UI file isn't found, so a window object may not even exist. */
 
-  /* FIXME: disable playback related menu items */
-  /* FIXME: output this in a saner way */
-  g_printerr ("%s\n", msg);
+  if (window->error)
+    return;
   window->error = TRUE;
+  va_start (varargs, format);
+  msg = g_strdup_vprintf (format, varargs);
+  va_end (varargs);
+
+  if (window->window == NULL) {
+    g_printerr ("%s\n", msg);
+    g_free (msg);
+    return;
+  }
+  /* Translators: This is used to markup error message. */
+  markup = g_strdup_printf ("<b>%s</b>", msg);
+  gtk_label_set_label (GTK_LABEL (gtk_builder_get_object (window->builder, 
+	  "player-error-label")), markup);
+  g_free (markup);
+  g_free (msg);
+
+  gtk_widget_show (GTK_WIDGET (gtk_builder_get_object (window->builder, 
+	  "player-error-area")));
 }
 
 static void
