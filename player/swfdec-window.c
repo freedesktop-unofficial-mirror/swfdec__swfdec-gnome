@@ -86,6 +86,7 @@ swfdec_window_player_aborted (SwfdecPlayer *player, GParamSpec *pspec, SwfdecWin
 static void
 swfdec_window_player_next_event (SwfdecPlayer *player, GParamSpec *pspec, SwfdecWindow *window)
 {
+#if 0
   gboolean eof, error;
 
   g_object_get (window->loader, "error", &error, "eof", &eof, NULL);
@@ -98,6 +99,7 @@ swfdec_window_player_next_event (SwfdecPlayer *player, GParamSpec *pspec, Swfdec
     swfdec_window_error (window, _("<i>%s</i> is not a Flash file."), 
 	swfdec_loader_get_filename (window->loader));
   }
+#endif
 }
 
 static void
@@ -110,7 +112,7 @@ swfdec_window_player_initialized (SwfdecPlayer *player, GParamSpec *pspec, Swfde
 
   if (swfdec_player_is_initialized (player)) {
     gtk_recent_manager_add_full (gtk_recent_manager_get_default (),
-	swfdec_url_get_url (swfdec_loader_get_url (window->loader)),
+	swfdec_url_get_url (swfdec_player_get_url (window->player)),
 	&data);
     g_signal_handlers_disconnect_by_func (player, swfdec_window_player_next_event, window);
   }
@@ -131,6 +133,7 @@ gboolean
 swfdec_window_set_url (SwfdecWindow *window, const char *url)
 {
   SwfdecWindowSettings settings;
+  SwfdecURL *u;
   GObject *o;
   char *s;
 
@@ -140,7 +143,6 @@ swfdec_window_set_url (SwfdecWindow *window, const char *url)
   if (window->player || window->error)
     return FALSE;
 
-  window->loader = swfdec_gtk_loader_new (url);
   window->player = swfdec_gtk_player_new (NULL);
   g_signal_connect (window->player, "notify::aborted", 
       G_CALLBACK (swfdec_window_player_aborted), window);
@@ -148,12 +150,14 @@ swfdec_window_set_url (SwfdecWindow *window, const char *url)
       G_CALLBACK (swfdec_window_player_initialized), window);
   g_signal_connect (window->player, "notify::next-event", 
       G_CALLBACK (swfdec_window_player_next_event), window);
-  swfdec_player_set_loader (window->player, window->loader);
+  u = swfdec_url_new_from_input (url);
+  swfdec_player_set_url (window->player, u);
+  s = swfdec_url_format_for_display (u);
+  swfdec_url_free (u);
   swfdec_gtk_player_set_audio_enabled (SWFDEC_GTK_PLAYER (window->player), 
       window->settings.sound);
   o = gtk_builder_get_object (window->builder, "player-widget");
   swfdec_gtk_widget_set_player (SWFDEC_GTK_WIDGET (o), window->player);
-  s = swfdec_loader_get_filename (window->loader);
   gtk_window_set_title (GTK_WINDOW (window->window), s);
   g_free (s);
   /* do this at the end to not get lag */

@@ -23,7 +23,7 @@
 #include "config.h"
 #endif
 
-#include <libswfdec/swfdec.h>
+#include <swfdec/swfdec.h>
 
 #define BORING_IMAGE_VARIANCE 256.0		/* Tweak this if necessary */
 
@@ -99,7 +99,7 @@ main (int argc, char **argv)
   GOptionContext *context;
   GError *err;
   SwfdecPlayer *player;
-  SwfdecLoader *loader;
+  SwfdecURL *url;
   guint width, height;
   double scale, scaled_size, x, y, w, h;
   guint try;
@@ -141,16 +141,11 @@ main (int argc, char **argv)
     return 1;
   }
 
-  loader = swfdec_file_loader_new (filenames[0]);
-  if (loader->error) {
-    g_printerr ("Error loading %s: %s\n", filenames[0], loader->error);
-    g_object_unref (loader);
-    return 1;
-  }
-
   timer = g_timer_new ();
   player = swfdec_player_new (NULL);
-  swfdec_player_set_loader (player, loader);
+  url = swfdec_url_new_from_input (filenames[0]);
+  swfdec_player_set_url (player, url);
+  swfdec_url_free (url);
   g_timer_start (timer);
 
   /* Skip the first 10 seconds */

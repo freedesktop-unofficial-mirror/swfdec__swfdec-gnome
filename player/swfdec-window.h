@@ -18,8 +18,8 @@
  */
 
 #include <gtk/gtk.h>
-#include <libswfdec/swfdec.h>
-#include <libswfdec-gtk/swfdec-gtk.h>
+#include <swfdec/swfdec.h>
+#include <swfdec-gtk/swfdec-gtk.h>
 
 #ifndef __SWFDEC_WINDOW_H__
 #define __SWFDEC_WINDOW_H__
@@ -50,7 +50,6 @@ struct _SwfdecWindow
   GtkBuilder *		builder;	/* builder instance to load from */
   GtkWidget *		window;		/* the toplevel window */
   SwfdecPlayer *	player;		/* the player we show or NULL if not initialized yet */
-  SwfdecLoader *	loader;		/* the loader we use to load the content or NULL if not initialized yet */
   SwfdecWindowSettings	settings;	/* the settings that apply to this window */
 };
 
